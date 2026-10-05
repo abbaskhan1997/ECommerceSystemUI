@@ -10,12 +10,17 @@ interface LoginResponse {
 })
 export class AuthService {
   
-  private url = 'https://localhost:7223/api/Auth/login';
+  private url = 'https://localhost:7223/api/Auth';
   constructor(private http: HttpClient) { }
 
   login(email: string, password: string) {
     
     const body = { email, password };
     return this.http.post<LoginResponse>(this.url, body);
+  }
+
+  register(name: string, email: string, password: string) {
+    const body = { name, email, password };
+    return this.http.post(`${this.url}/register`, body, { responseType: 'text' });
   }
 }
