@@ -14,10 +14,9 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(email: string, password: string) {
-    
-    const body = { email, password };
-    return this.http.post<LoginResponse>(this.url, body);
-  }
+  const body = { email, password };
+  return this.http.post<LoginResponse>(`${this.url}/login`, body);
+}
 
   register(name: string, email: string, password: string) {
     const body = { name, email, password };
