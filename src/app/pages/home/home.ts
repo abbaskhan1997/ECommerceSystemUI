@@ -1,5 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { SchoolService } from '../../services/school.service';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   imports: [],
@@ -10,7 +12,7 @@ import { SchoolService } from '../../services/school.service';
 export class Home {
   schools = signal<any[]>([]);
 
-  constructor(private schoolService: SchoolService) { }
+  constructor(private schoolService: SchoolService, private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.getSchools();
@@ -21,4 +23,9 @@ export class Home {
       this.schools.set(data as any[]);
     });
   }
+
+  logout() {
+  this.authService.logout();
+  this.router.navigate(['/login']);
+}
 }

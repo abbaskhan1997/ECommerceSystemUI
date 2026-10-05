@@ -22,4 +22,9 @@ export class AuthService {
     const body = { name, email, password };
     return this.http.post(`${this.url}/register`, body, { responseType: 'text' });
   }
+
+  logout() {
+    localStorage.removeItem('token');
+  }
+  
 }
