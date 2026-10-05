@@ -1,1 +1,9 @@
 <h1>Welcome to ECommerce System</h1>
+
+<h2>Schools</h2>
+
+<ul>
+  @for (school of schools(); track school.id) {
+    <li>{{ school.name }}</li>
+  }
+</ul>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { SchoolService } from '../../services/school.service';
 
 @Component({
@@ -8,7 +8,8 @@ import { SchoolService } from '../../services/school.service';
   templateUrl: './home.html',
 })
 export class Home {
-  
+  schools = signal<any[]>([]);
+
   constructor(private schoolService: SchoolService) { }
 
   ngOnInit() {
@@ -17,7 +18,7 @@ export class Home {
 
   getSchools() {
     this.schoolService.getSchools().subscribe((data) => {
-      console.log(data);
+      this.schools.set(data as any[]);
     });
   }
 }
