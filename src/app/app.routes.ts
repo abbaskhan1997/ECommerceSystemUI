@@ -4,6 +4,7 @@ import { Login } from './pages/login/login';
 import { Register } from './pages/register/register';
 import { ForgotPassword } from './pages/forgot-password/forgot-password';
 import { ResetPassword } from './pages/reset-password/reset-password';
+import { Products } from './pages/products/products';
 
 export const routes: Routes = [
   {
@@ -29,5 +30,10 @@ export const routes: Routes = [
   {
     path: 'reset-password',
     component: ResetPassword,
+  },
+
+  {
+    path: 'products',
+    component: Products,
   },
 ];

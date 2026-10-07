@@ -1,0 +1,9 @@
+<h1>Products</h1>
+
+@for (product of products(); track product.id) {
+  <div>
+    <h2>{{ product.name }}</h2>
+    <p>Price: {{ product.price }}</p>
+    <p>Stock: {{ product.stockQuantity }}</p>
+  </div>
+}
