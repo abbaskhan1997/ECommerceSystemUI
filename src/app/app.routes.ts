@@ -6,6 +6,7 @@ import { ForgotPassword } from './pages/forgot-password/forgot-password';
 import { ResetPassword } from './pages/reset-password/reset-password';
 import { Products } from './pages/products/products';
 import { ProductDetail } from './pages/product-detail/product-detail';
+import { AdminDashboard } from './pages/admin-dashboard/admin-dashboard';
 
 export const routes: Routes = [
   {
@@ -41,5 +42,10 @@ export const routes: Routes = [
   {
   path: 'products/:id',
   component: ProductDetail,
+},
+
+{
+  path: 'admin-dashboard',
+  component: AdminDashboard
 },
 ];

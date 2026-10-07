@@ -20,11 +20,26 @@ export class Login {
   ) {}
 
   login() {
-    this.authService.login(this.email, this.password).subscribe((response) => {
-      const token = response.token;
-      localStorage.setItem('token', token);
-      console.log('Login successful. Token stored in localStorage.');
-      this.router.navigate(['/']);
+
+    this.authService.login(this.email, this.password).subscribe({
+      next: (response) => {
+
+        localStorage.setItem('token', response.token);
+
+        const role = this.authService.getRole();
+
+        if (role === 'Admin') {
+          this.router.navigate(['/admin-dashboard']);
+          alert('Login successful! Welcome, Admin.');
+        } else {
+          this.router.navigate(['/']);
+        }
+      },
+
+      error: (error) => {
+        console.log(error);
+        alert('Invalid email or password');
+      }
     });
   }
 }
