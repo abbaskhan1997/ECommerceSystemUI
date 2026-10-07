@@ -14,13 +14,11 @@ export class Register {
   email = '';
   password = '';
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
   register() {
     this.authService.register(this.name, this.email, this.password).subscribe((response) => {
       console.log('Registration successful:', response);
     });
   }
-
-  
 }

@@ -11,12 +11,13 @@ import { Router } from '@angular/router';
   templateUrl: './login.html',
 })
 export class Login {
+  email = '';
+  password = '';
 
-  email='';
-  password='';
-  
-
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   login() {
     this.authService.login(this.email, this.password).subscribe((response) => {
@@ -26,5 +27,7 @@ export class Login {
       this.router.navigate(['/']);
     });
   }
-
 }
+
+
+// vkbe pjog bqdw exhc

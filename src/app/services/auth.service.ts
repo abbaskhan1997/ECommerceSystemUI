@@ -26,5 +26,23 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
   }
-  
+
+  forgotPassword(email: string) {
+    const body = { email };
+   return this.http.post(
+  'https://localhost:7223/api/Users/forgot-password',body);
+  } 
+
+  resetPassword(token: string, newPassword: string) {
+  const body = {
+    token,
+    newPassword
+  };
+
+  return this.http.post(
+    'https://localhost:7223/api/Users/reset-password',
+    body,
+    { responseType: 'text' }
+  );
+}
 }
