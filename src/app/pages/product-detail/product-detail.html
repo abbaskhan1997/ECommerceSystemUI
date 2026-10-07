@@ -1,0 +1,19 @@
+<h1>Product Details</h1>
+
+@if (product()) {
+
+  <h2>{{ product()?.name }}</h2>
+
+  <p>Description: {{ product()?.description }}</p>
+
+  <p>Price: {{ product()?.price }}</p>
+
+  <p>Stock: {{ product()?.stockQuantity }}</p>
+
+  <p>Category: {{ product()?.category?.name }}</p>
+
+  <p>School: {{ product()?.school?.name }}</p>
+
+  <p>Class: {{ product()?.schoolClass?.name }}</p>
+
+}

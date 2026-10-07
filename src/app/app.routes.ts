@@ -5,6 +5,7 @@ import { Register } from './pages/register/register';
 import { ForgotPassword } from './pages/forgot-password/forgot-password';
 import { ResetPassword } from './pages/reset-password/reset-password';
 import { Products } from './pages/products/products';
+import { ProductDetail } from './pages/product-detail/product-detail';
 
 export const routes: Routes = [
   {
@@ -36,4 +37,9 @@ export const routes: Routes = [
     path: 'products',
     component: Products,
   },
+
+  {
+  path: 'products/:id',
+  component: ProductDetail,
+},
 ];

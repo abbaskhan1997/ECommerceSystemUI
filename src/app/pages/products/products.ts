@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { ProductService } from '../../services/product.service';
 
+
 @Component({
   imports: [],
   selector: 'app-products',
@@ -15,12 +16,14 @@ export class Products {
 
   ngOnInit() {
     this.getProducts();
+    
   }
 
   getProducts() {
     this.productService.getProducts().subscribe((data: any) => {
       this.products.set(data.products);
-      console.log(this.products());
     });
   }
+
+ 
 }
