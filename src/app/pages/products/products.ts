@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { ProductService } from '../../services/product.service';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
-  imports: [],
+  imports: [RouterLink],
   selector: 'app-products',
   styleUrl: './products.css',
   templateUrl: './products.html',
