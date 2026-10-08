@@ -1,0 +1,162 @@
+<h1>Admin Products</h1>
+
+<h2>Add Product</h2>
+
+<div>
+
+  <label>Name</label>
+  <input
+    type="text"
+    [(ngModel)]="name"
+  >
+
+</div>
+
+<div>
+
+  <label>Description</label>
+  <textarea
+    [(ngModel)]="description"
+  ></textarea>
+
+</div>
+
+<div>
+
+  <label>Price</label>
+  <input
+    type="number"
+    [(ngModel)]="price"
+  >
+
+</div>
+
+<div>
+
+  <label>Stock Quantity</label>
+  <input
+    type="number"
+    [(ngModel)]="stockQuantity"
+  >
+
+</div>
+
+<div>
+  <label>Category</label>
+
+  <select [(ngModel)]="categoryId">
+
+    <option [value]="0">
+      Select Category
+    </option>
+
+    @for (category of categories(); track category.id) {
+
+      <option [value]="category.id">
+        {{ category.name }}
+      </option>
+
+    }
+
+  </select>
+</div>
+
+<div>
+  <label>School</label>
+
+  <select [(ngModel)]="schoolId">
+
+    <option [value]="0">
+      Select School
+    </option>
+
+    @for (school of schools(); track school.id) {
+
+      <option [value]="school.id">
+        {{ school.name }}
+      </option>
+
+    }
+
+  </select>
+</div>
+
+
+<div>
+  <label>Class</label>
+
+  <select [(ngModel)]="schoolClassId">
+
+    <option [value]="0">
+      Select Class
+    </option>
+
+    @for (schoolClass of classes(); track schoolClass.id) {
+
+      <option [value]="schoolClass.id">
+        {{ schoolClass.name }}
+      </option>
+
+    }
+
+  </select>
+</div>
+
+<button (click)="addProduct()">
+  Add Product
+</button>
+
+<h1>Admin Products</h1>
+
+<h2>Products</h2>
+
+<table>
+
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Stock</th>
+      <th>Category</th>
+      <th>School</th>
+      <th>Class</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    @for (product of products(); track product.id) {
+
+      <tr>
+
+        <td>{{ product.id }}</td>
+
+        <td>{{ product.name }}</td>
+
+        <td>{{ product.description }}</td>
+
+        <td>{{ product.price }}</td>
+
+        <td>{{ product.stockQuantity }}</td>
+
+        <td>{{ product.category?.name }}</td>
+
+        <td>{{ product.school?.name }}</td>
+
+        <td>{{ product.schoolClass?.name }}</td>
+
+        <td>
+          <button>Edit</button>
+          <button>Delete</button>
+        </td>
+
+      </tr>
+
+    }
+
+  </tbody>
+
+</table>

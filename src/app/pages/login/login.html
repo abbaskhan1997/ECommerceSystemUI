@@ -1,17 +1,80 @@
-<h1>Login</h1>
+<div class="login-page">
 
-<input type="email" placeholder="Email" [(ngModel)]="email" />
+  <div class="login-card">
 
-<input type="password" placeholder="Password" [(ngModel)]="password" />
+    <h1>Login</h1>
 
-<button (click)="login()">Login</button>
+    <input
+      type="email"
+      placeholder="Email"
+      [(ngModel)]="email"
+    />
 
-<p>
-  Don't have an account?
-  <a routerLink="/register">Register</a>
-</p>
+    <input
+      type="password"
+      placeholder="Password"
+      [(ngModel)]="password"
+    />
 
-<p>
-  Forgot your password?
-  <a routerLink="/forgot-password">Forgot Password</a>
-</p>
+    <button
+      type="button"
+      (click)="login()"
+    >
+      Login
+    </button>
+
+    <p>
+      Don't have an account?
+      <a routerLink="/register">Register</a>
+    </p>
+
+    <p>
+      Forgot your password?
+      <a routerLink="/forgot-password">Forgot Password</a>
+    </p>
+
+  </div>
+
+
+  <!-- Login Message Popup -->
+
+  @if (showMessagePopup()) {
+
+    <div class="popup-overlay">
+
+      <div class="success-popup">
+
+        @if (messageType() === 'error') {
+
+          <div class="error-icon">
+            !
+          </div>
+
+        } @else {
+
+          <div class="check-icon">
+            ✓
+          </div>
+
+        }
+
+        <h2>{{ messageTitle ()}}</h2>
+
+        <p>
+          {{ messageText ()}}
+        </p>
+
+        <button
+          type="button"
+          (click)="closeMessagePopup()"
+        >
+          OK
+        </button>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

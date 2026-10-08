@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component , signal} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { RouterLink } from '@angular/router';
-import { Router } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
+
 
 @Component({
   imports: [FormsModule, RouterLink],
@@ -11,38 +11,62 @@ import { Router } from '@angular/router';
   templateUrl: './login.html',
 })
 export class Login {
+
+  showMessagePopup = signal(false);
+messageTitle = signal('');
+messageText = signal('');
+messageType = signal<'success' | 'error'>('error');
+
   email = '';
   password = '';
+  loginRole: string | null = null;
 
   constructor(
     private authService: AuthService,
     private router: Router,
+    
   ) {}
+
+  
 
   login() {
 
     this.authService.login(this.email, this.password).subscribe({
-      next: (response) => {
 
-        localStorage.setItem('token', response.token);
+     next: (response) => {
+  localStorage.setItem('token', response.token);
 
-        const role = this.authService.getRole();
+  const role = this.authService.getRole();
+  this.loginRole = role;
 
-        if (role === 'Admin') {
-          this.router.navigate(['/admin-dashboard']);
-          alert('Login successful! Welcome, Admin.');
-        } else {
-          this.router.navigate(['/']);
-        }
-      },
+  this.messageTitle.set('Login Successful');
+  this.messageText.set('Welcome back!');
+  this.messageType.set('success');
+  this.showMessagePopup.set(true);
+},
 
       error: (error) => {
-        console.log(error);
-        alert('Invalid email or password');
-      }
-    });
-  }
+this.loginRole = null;
+
+  this.messageTitle.set('Login Failed');
+this.messageText.set('Invalid email or password');
+this.messageType.set('error');
+this.showMessagePopup.set(true);
+  
+
+  console.log('After:', this.showMessagePopup);
 }
 
+    });
+  }
 
-// vkbe pjog bqdw exhc
+ closeMessagePopup() {
+  this.showMessagePopup.set(false);
+
+  if (this.loginRole === 'Admin') {
+    this.router.navigate(['/admin-dashboard']);
+  } else if (this.loginRole === 'User') {
+    this.router.navigate(['/']);
+  }
+}
+}
