@@ -1,162 +1,370 @@
-<h1>Admin Products</h1>
+<div class="products-page">
 
-<h2>Add Product</h2>
+  <!-- Page Header -->
+  <div class="page-header">
 
-<div>
+    <div>
+      <h1>Products</h1>
+      <p>Manage all products in your shop</p>
+    </div>
 
-  <label>Name</label>
-  <input
-    type="text"
-    [(ngModel)]="name"
-  >
+    <button
+      type="button"
+      class="btn btn-add"
+      (click)="openAddProduct()"
+    >
+      + Add Product
+    </button>
+
+  </div>
+
+
+  <!-- Products Table -->
+  <div class="products-card">
+
+    <div class="table-header">
+      <h2>All Products</h2>
+    </div>
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Category</th>
+            <th>School</th>
+            <th>Class</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (product of products(); track product.id) {
+
+            <tr>
+
+              <td>{{ product.id }}</td>
+
+              <td>{{ product.name }}</td>
+
+              <td>{{ product.description }}</td>
+
+              <td>{{ product.price }}</td>
+
+              <td>{{ product.stockQuantity }}</td>
+
+              <td>{{ product.category?.name }}</td>
+
+              <td>{{ product.school?.name }}</td>
+
+              <td>{{ product.schoolClass?.name }}</td>
+
+              <td>
+
+                <button
+                  type="button"
+                  class="btn btn-edit"
+                  (click)="editProduct(product)"
+                >
+                  Edit
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-delete"
+                  (click)="confirmDelete(product.id)"
+                >
+                  Delete
+                </button>
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+
+  <!-- Add / Edit Product Modal -->
+  @if (showProductForm) {
+
+    <div class="popup-overlay">
+
+      <div class="product-modal">
+
+        <div class="modal-header">
+
+          <div>
+            @if (editingProductId !== null) {
+              <h2>Edit Product</h2>
+              <p>Update product information</p>
+            } @else {
+              <h2>Add Product</h2>
+              <p>Add a new product to your shop</p>
+            }
+          </div>
+
+          <button
+            type="button"
+            class="modal-close"
+            (click)="closeProductForm()"
+          >
+            ×
+          </button>
+
+        </div>
+
+
+        <!-- Product Name -->
+        <div class="form-group">
+
+          <label>Name</label>
+
+          <input
+            type="text"
+            [(ngModel)]="name"
+            placeholder="Enter product name"
+          />
+
+        </div>
+
+
+        <!-- Description -->
+        <div class="form-group">
+
+          <label>Description</label>
+
+          <textarea
+            [(ngModel)]="description"
+            placeholder="Enter product description"
+          ></textarea>
+
+        </div>
+
+
+        <!-- Price + Stock -->
+        <div class="form-row">
+
+          <div class="form-group">
+
+            <label>Price</label>
+
+            <input
+              type="number"
+              [(ngModel)]="price"
+              placeholder="Enter price"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Stock Quantity</label>
+
+            <input
+              type="number"
+              [(ngModel)]="stockQuantity"
+              placeholder="Enter stock quantity"
+            />
+
+          </div>
+
+        </div>
+
+
+        <!-- Category + School -->
+        <div class="form-row">
+
+          <div class="form-group">
+
+            <label>Category</label>
+
+            <select [(ngModel)]="categoryId">
+
+              <option [value]="0">
+                Select Category
+              </option>
+
+              @for (category of categories(); track category.id) {
+
+                <option [value]="category.id">
+                  {{ category.name }}
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>School</label>
+
+            <select [(ngModel)]="schoolId">
+
+              <option [value]="0">
+                Select School
+              </option>
+
+              @for (school of schools(); track school.id) {
+
+                <option [value]="school.id">
+                  {{ school.name }}
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <!-- Class -->
+        <div class="form-group">
+
+          <label>Class</label>
+
+          <select [(ngModel)]="schoolClassId">
+
+            <option [value]="0">
+              Select Class
+            </option>
+
+            @for (schoolClass of classes(); track schoolClass.id) {
+
+              <option [value]="schoolClass.id">
+                {{ schoolClass.name }}
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+
+        <!-- Modal Buttons -->
+        <div class="modal-actions">
+
+          <button
+            type="button"
+            class="btn btn-cancel"
+            (click)="closeProductForm()"
+          >
+            Cancel
+          </button>
+
+
+          @if (editingProductId !== null) {
+
+            <button
+              type="button"
+              class="btn btn-update"
+              (click)="updateProduct()"
+            >
+              Update Product
+            </button>
+
+          } @else {
+
+            <button
+              type="button"
+              class="btn btn-add"
+              (click)="addProduct()"
+            >
+              Add Product
+            </button>
+
+          }
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+
+  <!-- Product Added / Updated Success Popup -->
+  @if (showSuccessPopup) {
+
+    <div class="popup-overlay">
+
+      <div class="success-popup">
+
+        <div class="check-icon">✓</div>
+
+        <h2>Success!</h2>
+
+        <p>Product has been saved successfully.</p>
+
+        <button
+          type="button"
+          (click)="closeSuccessPopup()"
+        >
+          OK
+        </button>
+
+      </div>
+
+    </div>
+
+  }
+
+
+  <!-- Delete Confirmation Popup -->
+  @if (showDeletePopup) {
+
+    <div class="popup-overlay">
+
+      <div class="success-popup">
+
+        <h2>Delete Product?</h2>
+
+        <p>
+          Are you sure you want to delete this product?
+        </p>
+
+        <button
+          type="button"
+          class="btn btn-delete"
+          (click)="confirmDeleteYes()"
+        >
+          Yes
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-cancel"
+          (click)="confirmDeleteNo()"
+        >
+          No
+        </button>
+
+      </div>
+
+    </div>
+
+  }
 
 </div>
-
-<div>
-
-  <label>Description</label>
-  <textarea
-    [(ngModel)]="description"
-  ></textarea>
-
-</div>
-
-<div>
-
-  <label>Price</label>
-  <input
-    type="number"
-    [(ngModel)]="price"
-  >
-
-</div>
-
-<div>
-
-  <label>Stock Quantity</label>
-  <input
-    type="number"
-    [(ngModel)]="stockQuantity"
-  >
-
-</div>
-
-<div>
-  <label>Category</label>
-
-  <select [(ngModel)]="categoryId">
-
-    <option [value]="0">
-      Select Category
-    </option>
-
-    @for (category of categories(); track category.id) {
-
-      <option [value]="category.id">
-        {{ category.name }}
-      </option>
-
-    }
-
-  </select>
-</div>
-
-<div>
-  <label>School</label>
-
-  <select [(ngModel)]="schoolId">
-
-    <option [value]="0">
-      Select School
-    </option>
-
-    @for (school of schools(); track school.id) {
-
-      <option [value]="school.id">
-        {{ school.name }}
-      </option>
-
-    }
-
-  </select>
-</div>
-
-
-<div>
-  <label>Class</label>
-
-  <select [(ngModel)]="schoolClassId">
-
-    <option [value]="0">
-      Select Class
-    </option>
-
-    @for (schoolClass of classes(); track schoolClass.id) {
-
-      <option [value]="schoolClass.id">
-        {{ schoolClass.name }}
-      </option>
-
-    }
-
-  </select>
-</div>
-
-<button (click)="addProduct()">
-  Add Product
-</button>
-
-<h1>Admin Products</h1>
-
-<h2>Products</h2>
-
-<table>
-
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Price</th>
-      <th>Stock</th>
-      <th>Category</th>
-      <th>School</th>
-      <th>Class</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-
-  <tbody>
-
-    @for (product of products(); track product.id) {
-
-      <tr>
-
-        <td>{{ product.id }}</td>
-
-        <td>{{ product.name }}</td>
-
-        <td>{{ product.description }}</td>
-
-        <td>{{ product.price }}</td>
-
-        <td>{{ product.stockQuantity }}</td>
-
-        <td>{{ product.category?.name }}</td>
-
-        <td>{{ product.school?.name }}</td>
-
-        <td>{{ product.schoolClass?.name }}</td>
-
-        <td>
-          <button>Edit</button>
-          <button>Delete</button>
-        </td>
-
-      </tr>
-
-    }
-
-  </tbody>
-
-</table>

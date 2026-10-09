@@ -20,4 +20,13 @@ export class ProductService {
 addProduct(product: any) {
   return this.http.post(this.url, product);
 }
+
+updateProduct(id: number, product: any) {
+  return this.http.put(`${this.url}/${id}`, product); 
+}
+
+deleteProduct(id: number) {
+  return this.http.delete(`${this.url}/${id}`);
+}
+
 }
