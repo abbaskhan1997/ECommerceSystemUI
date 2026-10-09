@@ -50,3 +50,94 @@
   cursor: pointer;
   font-size: 15px;
 }
+
+
+/* popup css */
+/* Dono popups ka background overlay */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 99999;
+}
+
+/* Logout confirmation popup */
+.logout-popup {
+  width: 100%;
+  max-width: 380px;
+  padding: 30px 24px 24px;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+/* Logout successful popup */
+.success-popup {
+  width: 100%;
+  max-width: 380px;
+  padding: 30px 24px 24px;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+/* Success icon */
+.check-icon {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eaf8ee;
+  color: #1ea85d;
+  font-size: 38px;
+  font-weight: 700;
+}
+
+/* Dono popups ki headings */
+.logout-popup h2,
+.success-popup h2 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  color: #1f2937;
+}
+
+/* Dono popups ke messages */
+.logout-popup p,
+.success-popup p {
+  margin: 0 0 22px;
+  font-size: 15px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* Dono popups ke buttons */
+.logout-popup button,
+.success-popup button {
+  margin: 5px;
+  min-width: 80px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background: #1f2937;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.logout-popup button:hover,
+.success-popup button:hover {
+  opacity: 0.9;
+}

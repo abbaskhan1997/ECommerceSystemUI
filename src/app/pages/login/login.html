@@ -1,80 +1,77 @@
+
 <div class="login-page">
-
   <div class="login-card">
+    <h1>Welcome Back</h1>
+    <p class="login-subtitle">Sign in to continue to your account</p>
 
-    <h1>Login</h1>
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="Enter your email"
+        [(ngModel)]="email"
+      />
+    </div>
 
-    <input
-      type="email"
-      placeholder="Email"
-      [(ngModel)]="email"
-    />
+    <!-- Password -->
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        placeholder="Enter your password"
+        [(ngModel)]="password"
+      />
+    </div>
 
-    <input
-      type="password"
-      placeholder="Password"
-      [(ngModel)]="password"
-    />
-
+    <!-- Login Button -->
     <button
       type="button"
+      class="login-btn"
       (click)="login()"
     >
       Login
     </button>
 
-    <p>
+    <!-- Forgot Password -->
+    <p class="forgot-link">
+      <a routerLink="/forgot-password">Forgot Password?</a>
+    </p>
+
+    <!-- Register -->
+    <p class="register-link">
       Don't have an account?
       <a routerLink="/register">Register</a>
     </p>
-
-    <p>
-      Forgot your password?
-      <a routerLink="/forgot-password">Forgot Password</a>
-    </p>
-
   </div>
 
-
   <!-- Login Message Popup -->
-
   @if (showMessagePopup()) {
-
     <div class="popup-overlay">
-
       <div class="success-popup">
-
         @if (messageType() === 'error') {
-
-          <div class="error-icon">
-            !
-          </div>
-
+          <div class="error-icon">!</div>
         } @else {
-
-          <div class="check-icon">
-            ✓
-          </div>
-
+          <div class="check-icon">✓</div>
         }
 
-        <h2>{{ messageTitle ()}}</h2>
-
-        <p>
-          {{ messageText ()}}
-        </p>
-
-        <button
-          type="button"
-          (click)="closeMessagePopup()"
-        >
-          OK
-        </button>
-
+        <h2>{{ messageTitle() }}</h2>
+        <p>{{ messageText() }}</p>
       </div>
-
     </div>
-
   }
-
 </div>
+
+<!-- Logout Message Popup -->
+@if (logoutSuccessVisible$ | async) {
+  <div class="popup-overlay">
+    <div class="success-popup">
+      <div class="check-icon">✓</div>
+      <h2>Logout Successful</h2>
+      <p>{{ logoutMessage }}</p>
+    </div>
+  </div>
+}
+

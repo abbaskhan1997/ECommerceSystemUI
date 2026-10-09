@@ -1,14 +1,59 @@
-<h1>Create Account</h1>
 
-<input type="text" placeholder="Name" [(ngModel)]="name" />
+<div class="register-page">
+  <div class="register-card">
+    <h1>Create Account</h1>
 
-<input type="email" placeholder="Email" [(ngModel)]="email" />
+    <p class="register-subtitle">
+      Create your account to get started
+    </p>
 
-<input type="password" placeholder="Password" [(ngModel)]="password" />
+    <!-- Name -->
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input
+        id="name"
+        type="text"
+        placeholder="Enter your full name"
+        [(ngModel)]="name"
+      />
+    </div>
 
-<button (click)="register()">Register</button>
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="Enter your email"
+        [(ngModel)]="email"
+      />
+    </div>
 
-<p>
-  Already have an account?
-  <a routerLink="/login">Login</a>
-</p>
+    <!-- Password -->
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        placeholder="Create a password"
+        [(ngModel)]="password"
+      />
+    </div>
+
+    <!-- Register Button -->
+    <button
+      type="button"
+      class="register-btn"
+      (click)="register()"
+    >
+      Create Account
+    </button>
+
+    <!-- Login Link -->
+    <p class="login-link">
+      Already have an account?
+      <a routerLink="/login">Login</a>
+    </p>
+  </div>
+</div>
+

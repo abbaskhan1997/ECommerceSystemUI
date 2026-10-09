@@ -10,11 +10,30 @@ import { RouterLink } from '@angular/router';
   templateUrl: './admin-dashboard.html',
 })
 export class AdminDashboard {
+showLogoutPopup = false;
+showLogoutSuccessPopup = false;
+logoutMessage = '';
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  logout() {
+  
+
+confirmLogout() {
+  this.showLogoutPopup = true;
+}
+
+cancelLogout() {
+  this.showLogoutPopup = false;
+}
+
+ 
+logout() {
   this.authService.logout();
-  this.router.navigate(['/login']);
+
+  this.showLogoutPopup = false;
+
+  this.router.navigate(['/login'], {
+    state: { logoutSuccess: true }
+  });
 }
 }

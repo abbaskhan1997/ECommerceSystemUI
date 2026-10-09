@@ -16,7 +16,7 @@
       <a>Users</a>
     </nav>
 
-    <button (click)="logout()">Logout</button>
+    <button (click)="confirmLogout()">Logout</button>
 
   </aside>
 
@@ -52,3 +52,25 @@
   </main>
 
 </div>
+
+@if (showLogoutPopup) {
+  <div class="popup-overlay">
+    <div class="logout-popup">
+      <h2>Confirm Logout</h2>
+      <p>Are you sure you want to logout?</p>
+
+      <button (click)="logout()">Yes</button>
+      <button (click)="cancelLogout()">No</button>
+    </div>
+  </div>
+}
+
+@if (showLogoutSuccessPopup) {
+  <div class="popup-overlay">
+    <div class="success-popup">
+      <div class="check-icon">✓</div>
+      <h2>Logout Successful</h2>
+      <p>{{ logoutMessage }}</p>
+    </div>
+  </div>
+}
