@@ -19,12 +19,25 @@
   </div>
 
 
+<!-- Product Search -->
+<div class="product-search">
+  <input
+    type="text"
+   placeholder="Search by product, school or class..."
+    [(ngModel)]="searchText"
+  />
+</div>
+
+
+
+
   <!-- Products Table -->
   <div class="products-card">
 
     <div class="table-header">
       <h2>All Products</h2>
     </div>
+
 
     <div class="table-wrapper">
 
@@ -46,7 +59,7 @@
 
         <tbody>
 
-          @for (product of products(); track product.id) {
+         @for (product of filteredProducts; track product.id) {
 
             <tr>
 

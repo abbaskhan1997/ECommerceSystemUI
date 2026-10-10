@@ -22,6 +22,11 @@ export class AdminProduct {
   showDeletePopup = false;
   showProductForm = false;
 
+  // Search box mein user jo text likhega
+    searchText = ''; 
+
+  
+
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter' && this.showSuccessPopup) {
@@ -60,6 +65,33 @@ export class AdminProduct {
     this.schoolId = 0;
     this.schoolClassId = 0;
   }
+
+  // Search products by filter
+
+get filteredProducts() {
+  const searchWords = this.searchText
+    .toLowerCase()
+    .trim()
+    .split(/\s+/)
+    .filter(word => word.length > 0);
+
+  if (searchWords.length === 0) {
+    return this.products();
+  }
+
+  return this.products().filter((product: any) => {
+    const name = product.name?.toLowerCase() || '';
+    const school = product.school?.name?.toLowerCase() || '';
+    const schoolClass = product.schoolClass?.name?.toLowerCase() || '';
+
+    const searchableText = `${name} ${school} ${schoolClass}`;
+
+    // Har word ka match milna zaroori hai
+    return searchWords.every(word => searchableText.includes(word));
+  });
+}
+
+
 
   closeSuccessPopup() {
     this.showSuccessPopup = false;
