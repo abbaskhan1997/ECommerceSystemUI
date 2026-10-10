@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, signal, HostListener } from '@angular/core';
+import { Component, signal} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { RouterLink, Router } from '@angular/router';
@@ -21,13 +21,6 @@ export class Login {
   logoutSuccessVisible$ = new BehaviorSubject(false);
   logoutMessage = '';
 
-  @HostListener('document:keydown.enter', ['$event'])
-  onEnterKey(event: Event) {
-    if (this.showMessagePopup()) {
-      event.preventDefault();
-      this.closeMessagePopup();
-    }
-  }
 
   email = '';
   password = '';

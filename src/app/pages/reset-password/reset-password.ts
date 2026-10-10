@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { timer } from 'rxjs';
 // import { Router } from '@angular/router';
 
 @Component({
@@ -13,6 +14,10 @@ import { Router } from '@angular/router';
   templateUrl: './reset-password.html',
 })
 export class ResetPassword {
+  showMessagePopup = signal(false);
+  messageTitle = signal('');
+  messageText = signal('');
+
   token = '';
   newPassword = '';
 
@@ -29,12 +34,29 @@ export class ResetPassword {
   resetPassword() {
     this.authService.resetPassword(this.token, this.newPassword).subscribe({
       next: (response) => {
-        alert(response);
-        this.router.navigate(['/login']);
-       
+        this.messageTitle.set('Password Reset Successfully');
+        this.messageText.set('Your password has been reset successfully.');
+        this.showMessagePopup.set(true);
+
+        // after 2 seconds, close the popup and navigate to login page with resetSuccess state
+        timer(2000).subscribe(() => {
+          this.showMessagePopup.set(false);
+
+          this.router.navigate(['/login'], {
+            state: { resetSuccess: true },
+          });
+        });
       },
+
       error: (error) => {
-        alert('An error occurred while resetting the password.');
+        this.showMessagePopup.set(true);
+        this.messageTitle.set('Password Reset Failed');
+        this.messageText.set('An error occurred while resetting the password.');
+        
+        timer(2000).subscribe(() => {
+          this.showMessagePopup.set(false);
+        });
+        console.error(error);
       },
     });
   }
