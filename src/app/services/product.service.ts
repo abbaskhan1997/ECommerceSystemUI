@@ -9,9 +9,11 @@ export class ProductService {
 
   private url = 'https://localhost:7223/api/Products';
 
-  getProducts() {
-    return this.http.get(this.url);
-  }
+  getProducts(pageNumber: number = 1) {
+  return this.http.get(
+    `${this.url}?pageNumber=${pageNumber}`
+  );
+}
 
   getProductById(id: number) {
   return this.http.get(`${this.url}/${id}`);

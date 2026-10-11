@@ -22,10 +22,11 @@ export class AdminProduct {
   showDeletePopup = false;
   showProductForm = false;
 
-  // Search box mein user jo text likhega
-    searchText = ''; 
+  searchText = '';
 
-  
+  // pagination
+  currentPage = 1;
+  pageSize = 10;
 
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
@@ -68,46 +69,71 @@ export class AdminProduct {
 
   // Search products by filter
 
-get filteredProducts() {
-  const searchWords = this.searchText
-    .toLowerCase()
-    .trim()
-    .split(/\s+/)
-    .filter(word => word.length > 0);
+  get filteredProducts() {
+    const searchWords = this.searchText
+      .toLowerCase()
+      .trim()
+      .split(/\s+/)
+      .filter((word) => word.length > 0);
 
-  if (searchWords.length === 0) {
-    return this.products();
+    if (searchWords.length === 0) {
+      return this.products();
+    }
+
+    return this.products().filter((product: any) => {
+      const name = product.name?.toLowerCase() || '';
+      const school = product.school?.name?.toLowerCase() || '';
+      const schoolClass = product.schoolClass?.name?.toLowerCase() || '';
+
+      const searchableText = `${name} ${school} ${schoolClass}`;
+
+      return searchWords.every((word) => searchableText.includes(word));
+    });
   }
 
-  return this.products().filter((product: any) => {
-    const name = product.name?.toLowerCase() || '';
-    const school = product.school?.name?.toLowerCase() || '';
-    const schoolClass = product.schoolClass?.name?.toLowerCase() || '';
+  totalProducts = 0;
 
-    const searchableText = `${name} ${school} ${schoolClass}`;
+  get totalPages() {
+    return Math.ceil(this.totalProducts / this.pageSize);
+  }
 
-    // Har word ka match milna zaroori hai
-    return searchWords.every(word => searchableText.includes(word));
-  });
-}
+  // Show current page products
+  get paginatedProducts() {
+    return this.filteredProducts;
+  }
 
+  // next page show
 
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.getProducts();
+    }
+  }
+
+  // previous page show
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.getProducts();
+    }
+  }
 
   closeSuccessPopup() {
     this.showSuccessPopup = false;
   }
 
   openAddProduct() {
-  this.editingProductId = null;
-  this.resetForm();
-  this.showProductForm = true;
-}
+    this.editingProductId = null;
+    this.resetForm();
+    this.showProductForm = true;
+  }
 
-closeProductForm() {
-  this.showProductForm = false;
-  this.editingProductId = null;
-  this.resetForm();
-}
+  closeProductForm() {
+    this.showProductForm = false;
+    this.editingProductId = null;
+    this.resetForm();
+  }
 
   addProduct() {
     const product = {
@@ -134,23 +160,24 @@ closeProductForm() {
   }
 
   getProducts() {
-    this.productService.getProducts().subscribe((data: any) => {
+    this.productService.getProducts(this.currentPage).subscribe((data: any) => {
       this.products.set(data.products);
+      this.totalProducts = data.totalProducts;
     });
   }
 
   editProduct(product: any) {
-  this.editingProductId = product.id;
-  this.name = product.name;
-  this.description = product.description;
-  this.price = product.price;
-  this.stockQuantity = product.stockQuantity;
-  this.categoryId = product.categoryId;
-  this.schoolId = product.schoolId;
-  this.schoolClassId = product.schoolClassId;
+    this.editingProductId = product.id;
+    this.name = product.name;
+    this.description = product.description;
+    this.price = product.price;
+    this.stockQuantity = product.stockQuantity;
+    this.categoryId = product.categoryId;
+    this.schoolId = product.schoolId;
+    this.schoolClassId = product.schoolClassId;
 
-  this.showProductForm = true;
-}
+    this.showProductForm = true;
+  }
 
   updateProduct() {
     console.log('Update button clicked');
@@ -181,10 +208,8 @@ closeProductForm() {
 
   deleteProduct(productId: number) {
     this.productService.deleteProduct(productId).subscribe((response) => {
-    
       this.getProducts();
       this.showSuccessPopup = true;
-      
     });
   }
 
@@ -193,41 +218,36 @@ closeProductForm() {
     this.editingProductId = null;
   }
 
-
   confirmDeleteNo() {
-  this.deleteProductId = null;
-  this.showDeletePopup = false;
-}
-
-confirmDeleteYes() {
-
-  if (this.deleteProductId === null) {
-    return;
+    this.deleteProductId = null;
+    this.showDeletePopup = false;
   }
 
-  this.productService.deleteProduct(this.deleteProductId).subscribe({
-
-    next: () => {
-
-      this.getProducts();
-
-      this.showDeletePopup = false;
-      this.deleteProductId = null;
-
-      this.showSuccessPopup = true;
-    },
-
-    error: (error) => {
-      console.error('Error deleting product:', error);
+  confirmDeleteYes() {
+    if (this.deleteProductId === null) {
+      return;
     }
 
-  });
-}
+    this.productService.deleteProduct(this.deleteProductId).subscribe({
+      next: () => {
+        this.getProducts();
 
-confirmDelete(productId: number) {
-  this.deleteProductId = productId;
-  this.showDeletePopup = true;
-} 
+        this.showDeletePopup = false;
+        this.deleteProductId = null;
+
+        this.showSuccessPopup = true;
+      },
+
+      error: (error) => {
+        console.error('Error deleting product:', error);
+      },
+    });
+  }
+
+  confirmDelete(productId: number) {
+    this.deleteProductId = productId;
+    this.showDeletePopup = true;
+  }
 
   navigateToAdminDashboard() {
     this.router.navigate(['/admin-dashboard']);
