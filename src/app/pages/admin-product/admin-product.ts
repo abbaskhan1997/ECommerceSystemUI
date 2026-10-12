@@ -74,7 +74,7 @@ export class AdminProduct {
   }
 
   onSearchChange() {
-  this.currentPage = 1;
+  this.currentPage = 1; 
   this.getProducts();
 }
 

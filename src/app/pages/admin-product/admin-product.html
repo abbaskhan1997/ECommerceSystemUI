@@ -12,11 +12,11 @@
   <!-- Product Search -->
   <div class="product-search">
     <input
-  type="text"
-  [(ngModel)]="searchText"
-  (ngModelChange)="onSearchChange()"
-  placeholder="Search products..."
->
+      type="text"
+      [(ngModel)]="searchText"
+      (ngModelChange)="onSearchChange()"
+      placeholder="Search products..."
+    />
   </div>
 
   <!-- Products Table -->
@@ -29,6 +29,7 @@
       <table>
         <thead>
           <tr>
+            <th>No.</th>
             <th>ID</th>
             <th>Name</th>
             <th>Description</th>
@@ -42,8 +43,10 @@
         </thead>
 
         <tbody>
-          @for (product of paginatedProducts; track product.id) {
+          @for (product of paginatedProducts; track product.id; let i = $index) {
             <tr>
+              <td>{{ (currentPage - 1) * pageSize + $index + 1 }}</td>
+
               <td>{{ product.id }}</td>
 
               <td>{{ product.name }}</td>

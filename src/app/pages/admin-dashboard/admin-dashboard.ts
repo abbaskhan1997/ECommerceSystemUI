@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   imports: [RouterLink],
@@ -14,8 +15,14 @@ showLogoutPopup = false;
 showLogoutSuccessPopup = false;
 logoutMessage = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
 
+  constructor(private authService: AuthService, 
+    private router: Router, 
+    private productService: ProductService) { }
+
+  ngOnInit() {
+  this.productService.refreshProductCount();
+}
   
 
 confirmLogout() {
