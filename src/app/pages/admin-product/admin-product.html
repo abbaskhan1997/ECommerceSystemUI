@@ -12,10 +12,11 @@
   <!-- Product Search -->
   <div class="product-search">
     <input
-      type="text"
-      placeholder="Search by product, school or class..."
-      [(ngModel)]="searchText"
-    />
+  type="text"
+  [(ngModel)]="searchText"
+  (ngModelChange)="onSearchChange()"
+  placeholder="Search products..."
+>
   </div>
 
   <!-- Products Table -->

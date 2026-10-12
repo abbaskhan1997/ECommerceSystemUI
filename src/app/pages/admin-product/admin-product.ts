@@ -70,26 +70,13 @@ export class AdminProduct {
   // Search products by filter
 
   get filteredProducts() {
-    const searchWords = this.searchText
-      .toLowerCase()
-      .trim()
-      .split(/\s+/)
-      .filter((word) => word.length > 0);
-
-    if (searchWords.length === 0) {
-      return this.products();
-    }
-
-    return this.products().filter((product: any) => {
-      const name = product.name?.toLowerCase() || '';
-      const school = product.school?.name?.toLowerCase() || '';
-      const schoolClass = product.schoolClass?.name?.toLowerCase() || '';
-
-      const searchableText = `${name} ${school} ${schoolClass}`;
-
-      return searchWords.every((word) => searchableText.includes(word));
-    });
+    return this.products();
   }
+
+  onSearchChange() {
+  this.currentPage = 1;
+  this.getProducts();
+}
 
   totalProducts = 0;
 
@@ -160,7 +147,7 @@ export class AdminProduct {
   }
 
   getProducts() {
-    this.productService.getProducts(this.currentPage).subscribe((data: any) => {
+    this.productService.getProducts(this.currentPage, this.searchText).subscribe((data: any) => {
       this.products.set(data.products);
       this.totalProducts = data.totalProducts;
     });
