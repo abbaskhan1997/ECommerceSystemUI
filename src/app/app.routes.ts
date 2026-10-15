@@ -8,6 +8,8 @@ import { Products } from './pages/products/products';
 import { ProductDetail } from './pages/product-detail/product-detail';
 import { AdminDashboard } from './pages/admin-dashboard/admin-dashboard';
 import { AdminProduct } from './pages/admin-product/admin-product';
+import { AdminUsers } from './pages/admin-users/admin-users'
+
 
 export const routes: Routes = [
   {
@@ -53,5 +55,10 @@ export const routes: Routes = [
 {
   path: 'admin-product',
   component: AdminProduct
-}
+},
+
+{
+  path: 'admin-user',
+  component: AdminUsers
+},
 ];

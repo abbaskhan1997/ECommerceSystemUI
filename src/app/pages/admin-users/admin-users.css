@@ -1,0 +1,235 @@
+
+/* ================================
+   Main Users Page
+================================ */
+
+.users-page {
+  padding: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+
+/* ================================
+   Page Header
+================================ */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 30px;
+  color: #1f2937;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+
+/* ================================
+   Users Card
+================================ */
+
+.users-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+.table-header {
+  margin-bottom: 18px;
+}
+
+.table-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #1f2937;
+}
+
+
+/* ================================
+   Table
+================================ */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 950px;
+}
+
+thead {
+  background: #f8fafc;
+}
+
+th {
+  padding: 14px 12px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+td {
+  padding: 15px 12px;
+  font-size: 14px;
+  color: #374151;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+
+/* ================================
+   Edit Button
+================================ */
+
+.edit-btn {
+  background: #2563eb;
+  color: #ffffff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+  margin-right: 6px;
+}
+
+.edit-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+
+/* ================================
+   Delete Button
+================================ */
+
+.delete-btn {
+  background: #dc2626;
+  color: #ffffff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.delete-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+
+/* ================================
+   Responsive Design
+================================ */
+
+@media (max-width: 768px) {
+  .users-page {
+    padding: 15px;
+  }
+
+  .users-card {
+    padding: 16px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+}
+
+
+/* Popup background overlay */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* White popup card */
+.popup-box {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  padding: 30px;
+  background: #ffffff;
+  color: #0e8130;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Success Icon */
+
+.success-icon {
+  width: 65px;
+  height: 65px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  font-weight: bold;
+}
+
+.popup-box h2 {
+  margin: 0 0 12px;
+  color: #1f2937;
+  font-size: 22px;
+}
+
+.popup-box p {
+  margin: 0 0 24px;
+  color: #4b5563;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.popup-box button {
+  margin: 4px;
+}
+
+/* Keep popup card visible above the table */
+.popup-overlay .popup-box {
+  flex-shrink: 0;
+}
