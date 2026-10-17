@@ -229,7 +229,97 @@ tbody tr:hover {
   margin: 4px;
 }
 
-/* Keep popup card visible above the table */
-.popup-overlay .popup-box {
-  flex-shrink: 0;
+/* Keep popup card visible above the table *//* Edit popup ka background */
+.edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  z-index: 1000;
 }
+
+/* Edit form popup */
+.edit-modal {
+  width: 100%;
+  max-width: 450px;
+  padding: 25px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+}
+
+.edit-modal h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.edit-modal label {
+  display: block;
+  margin: 12px 0 6px;
+  font-weight: 600;
+}
+
+.edit-modal input,
+.edit-modal select {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.edit-modal .form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.edit-modal .form-actions button {
+  flex: 1;
+  padding: 11px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+
+/* Search box ka outer container */
+.search-box {
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 400px;
+  margin-left: auto;
+}
+
+/* Search input ki styling */
+.search-box input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Jab search box par click karein */
+.search-box input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Mobile screen par full width */
+@media (max-width: 600px) {
+  .search-box {
+    max-width: 100%;
+  }
+}
+
+

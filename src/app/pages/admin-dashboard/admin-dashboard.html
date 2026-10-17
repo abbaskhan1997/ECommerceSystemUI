@@ -10,7 +10,9 @@
       <a>Schools</a>
       <a>Classes</a>
       <a>Orders</a>
-      <a>Users</a>
+      <a routerLink="/admin-user" class="user-link">
+  Users
+</a>
     </nav>
 
     <button (click)="confirmLogout()">Logout</button>
@@ -35,7 +37,7 @@
 
       <div class="card">
         <h3>Users</h3>
-        <p>15</p>
+        <p>{{ userCount() }}</p>
       </div>
     </div>
   </main>

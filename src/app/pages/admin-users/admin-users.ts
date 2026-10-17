@@ -2,9 +2,10 @@ import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user-service';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [FormsModule],
+  imports: [FormsModule,RouterLink],
   selector: 'app-admin-users',
   styleUrl: './admin-users.css',
   templateUrl: './admin-users.html',
@@ -19,10 +20,21 @@ export class AdminUsers {
 
   selectedUser: any = null;
 
+  searchText = '';
+
   constructor(
     private userService: UserService,
     private router: Router,
   ) {}
+
+  filteredUsers() {
+  const search = this.searchText.toLowerCase();
+
+  return this.users().filter((user: any) =>
+    user.name.toLowerCase().includes(search) ||
+    user.email.toLowerCase().includes(search)
+  );
+}
 
   ngOnInit() {
     this.getUsers();
@@ -63,6 +75,9 @@ updateUser() {
   });
 }
 
+cancelEdit() {
+  this.selectedUser = null;
+}
 
   confirmDelete(userId: number) {
     this.deleteUserId = userId;

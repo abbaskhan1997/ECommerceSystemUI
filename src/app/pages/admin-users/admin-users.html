@@ -5,6 +5,45 @@
       <p>Manage your shop users and their roles.</p>
     </div>
   </div>
+@if (selectedUser) {
+  <div class="edit-overlay" (click)="cancelEdit()">
+    <div class="edit-modal" (click)="$event.stopPropagation()">
+
+      <h2>Edit User</h2>
+
+      <label>Name</label>
+      <input [(ngModel)]="selectedUser.name" readonly>
+
+      <label>Email</label>
+      <input [(ngModel)]="selectedUser.email" readonly>
+
+      <label>Role</label>
+      <select [(ngModel)]="selectedUser.role">
+        <option value="User">User</option>
+        <option value="Admin">Admin</option>
+      </select>
+
+      <div class="form-actions">
+        <button class="edit-btn" (click)="updateUser()">
+          Update
+        </button>
+
+        <button class="cancel-btn" (click)="cancelEdit()">
+          Cancel
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
+
+<div class="search-box">
+  <input
+    type="text"
+    placeholder="Search by name or email..."
+    [(ngModel)]="searchText"
+  />
+</div>
 
   <div class="users-card">
     <div class="table-header">
@@ -25,7 +64,7 @@
         </thead>
 
         <tbody>
-          @for (user of users(); track user.id; let i = $index) {
+          @for (user of filteredUsers(); track user.id; let i = $index) {
             <tr>
               <td>{{ i + 1 }}</td>
               <td>{{ user.id }}</td>
@@ -70,26 +109,5 @@
     </div>
   }
 
- @if (selectedUser) {
-  <div class="edit-form">
-    <h2>Edit User</h2>
-
-    <label>Name</label>
-    <input [(ngModel)]="selectedUser.name">
-
-    <label>Email</label>
-    <input [(ngModel)]="selectedUser.email">
-
-    <label>Role</label>
-    <select [(ngModel)]="selectedUser.role">
-      <option value="User">User</option>
-      <option value="Admin">Admin</option>
-    </select>
-
-    <button class="edit-btn" (click)="updateUser()">
-      Update
-    </button>
-  </div>
-}
 
 </div>

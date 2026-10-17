@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product.service';
+import { UserService } from '../../services/user-service';
 
 @Component({
   imports: [RouterLink],
@@ -11,36 +12,45 @@ import { ProductService } from '../../services/product.service';
   templateUrl: './admin-dashboard.html',
 })
 export class AdminDashboard {
-showLogoutPopup = false;
-showLogoutSuccessPopup = false;
-logoutMessage = '';
+  showLogoutPopup = false;
+  showLogoutSuccessPopup = false;
+  logoutMessage = '';
+  userCount = signal(0);
 
-
-  constructor(private authService: AuthService, 
-    private router: Router, 
-    private productService: ProductService) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private productService: ProductService,
+    private userService: UserService,
+  ) {}
 
   ngOnInit() {
-  this.productService.refreshProductCount();
-}
-  
+    this.productService.refreshProductCount();
+    this.userService.getUsers().subscribe({
+      next: (data: any) => {
+        this.userCount.set(data.length);
+      },
+      error: (error) => {
+        console.log('Users load nahi hue:', error);
+      },
+    });
+  }
 
-confirmLogout() {
-  this.showLogoutPopup = true;
-}
+  confirmLogout() {
+    this.showLogoutPopup = true;
+  }
 
-cancelLogout() {
-  this.showLogoutPopup = false;
-}
+  cancelLogout() {
+    this.showLogoutPopup = false;
+  }
 
- 
-logout() {
-  this.authService.logout();
+  logout() {
+    this.authService.logout();
 
-  this.showLogoutPopup = false;
+    this.showLogoutPopup = false;
 
-  this.router.navigate(['/login'], {
-    state: { logoutSuccess: true }
-  });
-}
+    this.router.navigate(['/login'], {
+      state: { logoutSuccess: true },
+    });
+  }
 }
