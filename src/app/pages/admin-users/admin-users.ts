@@ -22,10 +22,34 @@ export class AdminUsers {
 
   searchText = '';
 
+  // pagination
+  currentPage = 1;
+  pageSize = 10;
+
   constructor(
     private userService: UserService,
     private router: Router,
   ) {}
+
+  // paginated user
+  paginatedUsers() {
+  const startIndex = (this.currentPage - 1) * this.pageSize;
+
+  return this.filteredUsers().slice(
+    startIndex,
+    startIndex + this.pageSize
+  );
+}
+
+totalPages() {
+  return Math.ceil(this.filteredUsers().length / this.pageSize);
+}
+
+changePage(page: number) {
+  if (page >= 1 && page <= this.totalPages()) {
+    this.currentPage = page;
+  }
+}
 
   filteredUsers() {
   const search = this.searchText.toLowerCase();

@@ -5,45 +5,40 @@
       <p>Manage your shop users and their roles.</p>
     </div>
   </div>
-@if (selectedUser) {
-  <div class="edit-overlay" (click)="cancelEdit()">
-    <div class="edit-modal" (click)="$event.stopPropagation()">
+  @if (selectedUser) {
+    <div class="edit-overlay" (click)="cancelEdit()">
+      <div class="edit-modal" (click)="$event.stopPropagation()">
+        <h2>Edit User</h2>
 
-      <h2>Edit User</h2>
+        <label>Name</label>
+        <input [(ngModel)]="selectedUser.name" readonly />
 
-      <label>Name</label>
-      <input [(ngModel)]="selectedUser.name" readonly>
+        <label>Email</label>
+        <input [(ngModel)]="selectedUser.email" readonly />
 
-      <label>Email</label>
-      <input [(ngModel)]="selectedUser.email" readonly>
+        <label>Role</label>
+        <select [(ngModel)]="selectedUser.role">
+          <option value="User">User</option>
+          <option value="Admin">Admin</option>
+        </select>
 
-      <label>Role</label>
-      <select [(ngModel)]="selectedUser.role">
-        <option value="User">User</option>
-        <option value="Admin">Admin</option>
-      </select>
+        <div class="form-actions">
+          <button class="edit-btn" (click)="updateUser()">Update</button>
 
-      <div class="form-actions">
-        <button class="edit-btn" (click)="updateUser()">
-          Update
-        </button>
-
-        <button class="cancel-btn" (click)="cancelEdit()">
-          Cancel
-        </button>
+          <button class="cancel-btn" (click)="cancelEdit()">Cancel</button>
+        </div>
       </div>
-
     </div>
-  </div>
-}
+  }
 
-<div class="search-box">
-  <input
-    type="text"
-    placeholder="Search by name or email..."
-    [(ngModel)]="searchText"
-  />
-</div>
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Search by name or email..."
+      [(ngModel)]="searchText"
+      (ngModelChange)="currentPage = 1"
+    />
+  </div>
 
   <div class="users-card">
     <div class="table-header">
@@ -64,7 +59,7 @@
         </thead>
 
         <tbody>
-          @for (user of filteredUsers(); track user.id; let i = $index) {
+          @for (user of paginatedUsers(); track user.id; let i = $index) {
             <tr>
               <td>{{ i + 1 }}</td>
               <td>{{ user.id }}</td>
@@ -80,6 +75,22 @@
           }
         </tbody>
       </table>
+
+      <div class="pagination">
+        <button type="button" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+          Previous
+        </button>
+
+        <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+
+        <button
+          type="button"
+          (click)="changePage(currentPage + 1)"
+          [disabled]="currentPage >= totalPages()"
+        >
+          Next
+        </button>
+      </div>
     </div>
   </div>
 
@@ -108,6 +119,4 @@
       </div>
     </div>
   }
-
-
 </div>
