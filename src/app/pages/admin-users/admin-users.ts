@@ -2,10 +2,10 @@ import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user-service';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+
 
 @Component({
-  imports: [FormsModule,RouterLink],
+  imports: [FormsModule],
   selector: 'app-admin-users',
   styleUrl: './admin-users.css',
   templateUrl: './admin-users.html',

@@ -8,10 +8,9 @@ import { PopupService } from '../../services/popup-service';
   selector: 'app-admin-categories',
   imports: [FormsModule],
   templateUrl: './admin-categories.html',
-  styleUrl: './admin-categories.css'
+  styleUrl: './admin-categories.css',
 })
 export class AdminCategories implements OnInit {
-
   // Categories received from the backend API
   categories = signal<any[]>([]);
 
@@ -34,7 +33,7 @@ export class AdminCategories implements OnInit {
   // Dependency Injection (DI)
   constructor(
     private categoryService: CategoryService,
-    private popupService: PopupService
+    private popupService: PopupService,
   ) {}
 
   ngOnInit(): void {
@@ -50,11 +49,8 @@ export class AdminCategories implements OnInit {
       error: (error: any) => {
         console.error('Failed to load categories:', error);
 
-        this.popupService.show(
-          'Unable to load categories. Please try again.',
-          'error'
-        );
-      }
+        this.popupService.show('Unable to load categories. Please try again.', 'error');
+      },
     });
   }
 
@@ -62,8 +58,8 @@ export class AdminCategories implements OnInit {
   filteredCategories(): any[] {
     const search = this.searchText.toLowerCase().trim();
 
-    return this.categories().filter(category =>
-      (category.name ?? '').toLowerCase().includes(search)
+    return this.categories().filter((category) =>
+      (category.name ?? '').toLowerCase().includes(search),
     );
   }
 
@@ -71,18 +67,12 @@ export class AdminCategories implements OnInit {
   paginatedCategories(): any[] {
     const startIndex = (this.currentPage - 1) * this.pageSize;
 
-    return this.filteredCategories().slice(
-      startIndex,
-      startIndex + this.pageSize
-    );
+    return this.filteredCategories().slice(startIndex, startIndex + this.pageSize);
   }
 
   // Calculate total pages
   totalPages(): number {
-    return Math.max(
-      1,
-      Math.ceil(this.filteredCategories().length / this.pageSize)
-    );
+    return Math.max(1, Math.ceil(this.filteredCategories().length / this.pageSize));
   }
 
   // Change the current page
@@ -116,10 +106,7 @@ export class AdminCategories implements OnInit {
   // Add a new category or update an existing category
   saveCategory(): void {
     if (!this.categoryName.trim()) {
-      this.popupService.show(
-        'Category name is required.',
-        'error'
-      );
+      this.popupService.show('Category name is required.', 'error');
       return;
     }
 
@@ -128,13 +115,13 @@ export class AdminCategories implements OnInit {
     const categoryId = this.selectedCategory?.id;
 
     const category = {
-      name: this.categoryName.trim()
+      name: this.categoryName.trim(),
     };
 
     const request = isEditing
       ? this.categoryService.updateCategory(categoryId, {
           id: categoryId,
-          ...category
+          ...category,
         })
       : this.categoryService.addCategory(category);
 
@@ -144,10 +131,8 @@ export class AdminCategories implements OnInit {
 
         this.popupService.show(
           response?.message ||
-            (isEditing
-              ? 'Category updated successfully.'
-              : 'Category added successfully.'),
-          'success'
+            (isEditing ? 'Category updated successfully.' : 'Category added successfully.'),
+          'success',
         );
 
         this.getCategories();
@@ -156,11 +141,10 @@ export class AdminCategories implements OnInit {
         console.error('Failed to save category:', error);
 
         this.popupService.show(
-          error.error?.message ||
-            'Unable to save the category. Please try again.',
-          'error'
+          error.error?.message || 'Unable to save the category. Please try again.',
+          'error',
         );
-      }
+      },
     });
   }
 
@@ -183,10 +167,7 @@ export class AdminCategories implements OnInit {
         this.showDeletePopup = false;
         this.selectedCategoryId = null;
 
-        this.popupService.show(
-          response?.message || 'Category deleted successfully.',
-          'success'
-        );
+        this.popupService.show(response?.message || 'Category deleted successfully.', 'success');
 
         this.getCategories();
       },
@@ -197,11 +178,10 @@ export class AdminCategories implements OnInit {
         this.selectedCategoryId = null;
 
         this.popupService.show(
-          error.error?.message ||
-            'Unable to delete the category. Please try again.',
-          'error'
+          error.error?.message || 'Unable to delete the category. Please try again.',
+          'error',
         );
-      }
+      },
     });
   }
 
