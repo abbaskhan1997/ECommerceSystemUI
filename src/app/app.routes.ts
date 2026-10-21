@@ -9,6 +9,7 @@ import { ProductDetail } from './pages/product-detail/product-detail';
 import { AdminDashboard } from './pages/admin-dashboard/admin-dashboard';
 import { AdminProduct } from './pages/admin-product/admin-product';
 import { AdminUsers } from './pages/admin-users/admin-users'
+import { AdminCategories } from './pages/admin-categories/admin-categories'
 
 
 export const routes: Routes = [
@@ -61,4 +62,11 @@ export const routes: Routes = [
   path: 'admin-user',
   component: AdminUsers
 },
+
+{
+  path: 'admin-categories',
+  component: AdminCategories
+},
+
+
 ];

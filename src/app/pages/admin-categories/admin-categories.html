@@ -1,0 +1,149 @@
+<div class="users-page">
+
+  <div class="page-header">
+    <div>
+      <h1>Categories Management</h1>
+      <p>Manage your shop product categories.</p>
+    </div>
+
+    <button class="edit-btn" (click)="openAddModal()">
+      Add Category
+    </button>
+  </div>
+
+  <!-- Add/Edit category modal -->
+  @if (showCategoryModal) {
+    <div class="edit-overlay" (click)="closeModal()">
+      <div class="edit-modal" (click)="$event.stopPropagation()">
+
+        <h2>{{ selectedCategory ? 'Edit Category' : 'Add Category' }}</h2>
+
+        <label>Category Name</label>
+        <input
+          type="text"
+          [(ngModel)]="categoryName"
+          placeholder="Enter category name"
+        />
+
+        <div class="form-actions">
+          <button class="edit-btn" (click)="saveCategory()">
+            Save
+          </button>
+
+          <button class="cancel-btn" (click)="closeModal()">
+            Cancel
+          </button>
+        </div>
+
+      </div>
+    </div>
+  }
+
+  <!-- Search categories -->
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Search categories..."
+      [(ngModel)]="searchText"
+      (ngModelChange)="currentPage = 1"
+    />
+  </div>
+
+  <!-- Categories table -->
+  <div class="users-card">
+
+    <div class="table-header">
+      <h2>All Categories</h2>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>ID</th>
+            <th>Category Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (category of paginatedCategories(); track category.id; let i = $index) {
+            <tr>
+              <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+              <td>{{ category.id }}</td>
+              <td>{{ category.name }}</td>
+
+              <td>
+                <button
+                  class="edit-btn"
+                  (click)="editCategory(category)"
+                >
+                  Edit
+                </button>
+
+                <button
+                  class="delete-btn"
+                  (click)="confirmDelete(category.id)"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          }
+
+          @if (filteredCategories().length === 0) {
+            <tr>
+              <td colspan="4">No categories found.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button
+          type="button"
+          (click)="changePage(currentPage - 1)"
+          [disabled]="currentPage === 1"
+        >
+          Previous
+        </button>
+
+        <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+
+        <button
+          type="button"
+          (click)="changePage(currentPage + 1)"
+          [disabled]="currentPage >= totalPages()"
+        >
+          Next
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Delete confirmation popup -->
+  @if (showDeletePopup) {
+    <div class="popup-overlay" (click)="confirmDeleteNo()">
+      <div class="popup-box" (click)="$event.stopPropagation()">
+
+        <h2>Delete Category</h2>
+        <p>Are you sure you want to delete this category?</p>
+
+        <div class="form-actions">
+          <button class="delete-btn" (click)="confirmDeleteYes()">
+            Yes, Delete
+          </button>
+
+          <button class="cancel-btn" (click)="confirmDeleteNo()">
+            Cancel
+          </button>
+        </div>
+
+      </div>
+    </div>
+  }
+
+</div>

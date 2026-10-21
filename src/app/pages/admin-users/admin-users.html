@@ -73,6 +73,12 @@
               </td>
             </tr>
           }
+
+          @if (filteredUsers().length === 0) {
+  <tr>
+    <td colspan="5">No users found.</td>
+  </tr>
+}
         </tbody>
       </table>
 
