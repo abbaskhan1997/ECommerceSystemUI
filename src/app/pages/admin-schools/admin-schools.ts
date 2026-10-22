@@ -21,6 +21,8 @@ export class AdminSchools implements OnInit {
   showDeletePopup = false;
   deletingSchoolId: number | null = null;
 
+  
+
   searchText = '';
   currentPage = 1;
   pageSize = 10;

@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { UserService } from '../../services/user-service';
 import { CategoryService } from '../../services/category.service';
-
+import { SchoolService } from '../../services/school.service';
 @Component({
   imports: [RouterLink],
   selector: 'app-admin-dashboard',
@@ -18,6 +18,7 @@ export class AdminDashboard {
   logoutMessage = '';
   userCount = signal(0);
   categoryCount = signal(0);
+  schoolCount = signal(0);
 
   constructor(
     private authService: AuthService,
@@ -25,6 +26,7 @@ export class AdminDashboard {
     private productService: ProductService,
     private userService: UserService,
     private categoryService: CategoryService,
+    private schoolService: SchoolService
   ) {}
 
   ngOnInit() {
@@ -46,6 +48,16 @@ export class AdminDashboard {
     console.log('Categories load nahi hui:', error);
   },
 });
+
+this.schoolService.getSchools().subscribe({
+  next: (data: any[]) => {
+    this.schoolCount.set(data.length);
+  },
+  error: (error) => {
+    console.error('Failed to load school count:', error);
+  }
+});
+
   }
 
   confirmLogout() {

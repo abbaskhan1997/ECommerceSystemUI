@@ -7,7 +7,7 @@
       <a>Dashboard</a>
       <a routerLink="/admin-product">Products</a>
       <a routerLink="/admin-categories">Categories</a>
-      <a>Schools</a>
+      <a routerLink="/admin-schools">Schools</a>
       <a>Classes</a>
       <a>Orders</a>
       <a routerLink="/admin-user" class="user-link">
@@ -42,7 +42,7 @@
 
       <div class="card">
         <h3>Schools</h3>
-        <p>10</p>
+        <p>{{ schoolCount() }}</p>
       </div>
 
       <div class="card">
