@@ -18,8 +18,8 @@ export class AdminSchools implements OnInit {
   selectedSchool: any = null;
 
   showSchoolModal = false;
-  showDeletePopup = false;
-  deletingSchoolId: number | null = null;
+  showDeletePopup = signal(false);
+  deletingSchoolId = signal<number | null>(null);
 
   
 
@@ -150,38 +150,51 @@ export class AdminSchools implements OnInit {
 
   // Open delete confirmation
   confirmDelete(id: number): void {
-    this.deletingSchoolId = id;
-    this.showDeletePopup = true;
+    this.deletingSchoolId.set(id);
+    this.showDeletePopup.set(true);
   }
 
   // Cancel deletion
   confirmDeleteNo(): void {
-    this.showDeletePopup = false;
-    this.deletingSchoolId = null;
+    this.showDeletePopup.set(false);
+    this.deletingSchoolId.set(null);
   }
 
-  // Delete selected school
   confirmDeleteYes(): void {
-    if (this.deletingSchoolId === null) {
+    const id = this.deletingSchoolId();
+    if (id === null) {
       return;
     }
 
-    const id = this.deletingSchoolId;
-
     this.schoolService.deleteSchool(id).subscribe({
       next: () => {
-        this.confirmDeleteNo();
+        this.showDeletePopup.set(false);
+        this.deletingSchoolId.set(null);
+
         this.getSchools();
-        this.popupService.show('School deleted successfully.', 'success');
+
+      this.popupService.show('School deleted successfully.', 'success');
       },
       error: (error: any) => {
         console.error('Failed to delete school:', error);
-        this.confirmDeleteNo();
+
+        this.showDeletePopup.set(false);
+        this.deletingSchoolId.set(null);
+
+        const detail =
+          typeof error.error === 'string'
+            ? error.error
+            : error.error?.detail ?? error.error?.message ?? error.error?.title;
+        const status = error.status ? ` (HTTP ${error.status})` : '';
+
         this.popupService.show(
-          'Failed to delete school. It may be linked to existing records.',
+          detail
+            ? `Failed to delete school${status}: ${detail}`
+            : `Failed to delete school${status}. Check the API response for details.`,
           'error'
         );
       }
     });
   }
+
 }

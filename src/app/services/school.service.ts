@@ -24,8 +24,8 @@ export class SchoolService {
     return this.http.put<void>(`${this.url}/${id}`, school);
   }
 
-  deleteSchool(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${id}`);
+  deleteSchool(id: number): Observable<string> {
+    return this.http.delete(`${this.url}/${id}`, { responseType: 'text' });
   }
 
    getClasses() {
