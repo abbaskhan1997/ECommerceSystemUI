@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { UserService } from '../../services/user-service';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   imports: [RouterLink],
@@ -16,12 +17,14 @@ export class AdminDashboard {
   showLogoutSuccessPopup = false;
   logoutMessage = '';
   userCount = signal(0);
+  categoryCount = signal(0);
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private productService: ProductService,
     private userService: UserService,
+    private categoryService: CategoryService,
   ) {}
 
   ngOnInit() {
@@ -34,6 +37,15 @@ export class AdminDashboard {
         console.log('Users load nahi hue:', error);
       },
     });
+
+    this.categoryService.getCategories().subscribe({
+  next: (data: any[]) => {
+    this.categoryCount.set(data.length);
+  },
+  error: (error) => {
+    console.log('Categories load nahi hui:', error);
+  },
+});
   }
 
   confirmLogout() {
