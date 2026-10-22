@@ -10,6 +10,7 @@ import { AdminDashboard } from './pages/admin-dashboard/admin-dashboard';
 import { AdminProduct } from './pages/admin-product/admin-product';
 import { AdminUsers } from './pages/admin-users/admin-users'
 import { AdminCategories } from './pages/admin-categories/admin-categories'
+import { AdminSchools } from './pages/admin-schools/admin-schools'
 
 
 export const routes: Routes = [
@@ -66,6 +67,11 @@ export const routes: Routes = [
 {
   path: 'admin-categories',
   component: AdminCategories
+},
+
+{
+  path: 'admin-schools',
+  component: AdminSchools
 },
 
 

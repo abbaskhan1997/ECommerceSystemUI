@@ -1,0 +1,158 @@
+<div class="users-page">
+
+  <div class="page-header">
+    <div>
+      <h1>Schools Management</h1>
+      <p>Manage your shop's schools.</p>
+    </div>
+
+    <button class="edit-btn" (click)="openAddModal()">
+      Add School
+    </button>
+  </div>
+
+  <!-- Add/Edit School Modal -->
+  @if (showSchoolModal) {
+    <div class="edit-overlay" (click)="closeModal()">
+      <div class="edit-modal" (click)="$event.stopPropagation()">
+
+        <h2>{{ selectedSchool ? 'Edit School' : 'Add School' }}</h2>
+
+        <form (ngSubmit)="saveSchool()">
+          <label for="schoolName">School Name</label>
+
+          <input
+            type="text"
+            id="schoolName"
+            name="schoolName"
+            [(ngModel)]="schoolName"
+            placeholder="Enter school name"
+            required
+          />
+
+          <div class="form-actions">
+            <button type="submit" class="edit-btn">
+              Save
+            </button>
+
+            <button
+              type="button"
+              class="cancel-btn"
+              (click)="closeModal()"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  }
+
+  <!-- Search Schools -->
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Search schools..."
+      [(ngModel)]="searchText"
+      (ngModelChange)="currentPage = 1"
+    />
+  </div>
+
+  <!-- Schools Table -->
+  <div class="users-card">
+
+    <div class="table-header">
+      <h2>All Schools</h2>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>ID</th>
+            <th>School Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (school of paginatedSchools(); track school.id; let i = $index) {
+            <tr>
+              <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+              <td>{{ school.id }}</td>
+              <td>{{ school.name }}</td>
+
+              <td>
+                <button
+                  class="edit-btn"
+                  (click)="editSchool(school)"
+                >
+                  Edit
+                </button>
+
+                <button
+                  class="delete-btn"
+                  (click)="confirmDelete(school.id)"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          }
+
+          @if (filteredSchools().length === 0) {
+            <tr>
+              <td colspan="4">No schools found.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button
+          type="button"
+          (click)="changePage(currentPage - 1)"
+          [disabled]="currentPage === 1"
+        >
+          Previous
+        </button>
+
+        <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+
+        <button
+          type="button"
+          (click)="changePage(currentPage + 1)"
+          [disabled]="currentPage >= totalPages()"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Popup -->
+  @if (showDeletePopup) {
+    <div class="popup-overlay" (click)="confirmDeleteNo()">
+      <div class="popup-box" (click)="$event.stopPropagation()">
+
+        <h2>Delete School</h2>
+        <p>Are you sure you want to delete this school?</p>
+
+        <div class="form-actions">
+          <button class="delete-btn" (click)="confirmDeleteYes()">
+            Yes, Delete
+          </button>
+
+          <button class="cancel-btn" (click)="confirmDeleteNo()">
+            Cancel
+          </button>
+        </div>
+
+      </div>
+    </div>
+  }
+
+</div>
