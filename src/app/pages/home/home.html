@@ -1,11 +1,119 @@
-<h1>Welcome to ECommerce System</h1>
 
-<h2>Schools</h2>
+<div class="home-container">
 
-<ul>
-  @for (school of schools(); track school.id) {
-    <li>{{ school.name }}</li>
-  }
-</ul>
+  <header class="home-header">
+    <div class="brand">
+      <h2>The Uniform Shop</h2>
+    </div>
 
-<button (click)="logout()">Logout</button>
+    <button class="logout-btn" (click)="logout()">
+      Logout
+    </button>
+  </header>
+
+  <main class="home-content">
+
+    <section class="welcome-section">
+      <h1>Welcome to ECommerce System</h1>
+      <section class="hero-slider">
+
+ <div class="hero-slide" [class.active]="activeSlide () === 0">
+    <img
+      src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1600&q=85"
+      alt="School students and classroom"
+    />
+
+    <div class="hero-overlay">
+      <span>THE UNIFORM SHOP</span>
+      <h1>Smart Uniforms, Brighter Futures</h1>
+      <p>Discover school uniforms and essentials for your child.</p>
+      <button (click)="scrollToSchools()">Explore Schools</button>
+    </div>
+  </div>
+
+  <div class="hero-slide" [class.active]="activeSlide () === 1">
+    <img
+      src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=1600&q=85"
+      alt="Students learning at school"
+    />
+
+    <div class="hero-overlay">
+      <span>QUALITY YOU CAN TRUST</span>
+      <h1>Everything for School</h1>
+      <p>Find uniforms, shoes and books for your school.</p>
+      <button (click)="scrollToSchools()">Start Shopping</button>
+    </div>
+  </div>
+
+ <div class="hero-slide" [class.active]="activeSlide() === 2">
+    <img
+      src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1600&q=85"
+      alt="Children in an educational setting"
+    />
+
+    <div class="hero-overlay">
+      <span>YOUR SCHOOL, YOUR COLLECTION</span>
+      <h1>Find the Right School Uniform</h1>
+      <p>Select your school to explore its classes and products.</p>
+      <button (click)="scrollToSchools()">Choose Your School</button>
+    </div>
+  </div>
+
+  <button class="slider-arrow prev" (click)="previousSlide()" aria-label="Previous slide">
+    &#10094;
+  </button>
+
+  <button class="slider-arrow next" (click)="nextSlide()" aria-label="Next slide">
+    &#10095;
+  </button>
+
+  <div class="slider-dots">
+    <button
+      [class.active-dot]="activeSlide() === 0"
+      (click)="goToSlide(0)"
+      aria-label="Slide 1">
+    </button>
+
+    <button
+      [class.active-dot]="activeSlide() === 1"
+      (click)="goToSlide(1)"
+      aria-label="Slide 2">
+    </button>
+
+    <button
+      [class.active-dot]="activeSlide() === 2"
+      (click)="goToSlide(2)"
+      aria-label="Slide 3">
+    </button>
+  </div>
+
+</section>
+
+      <p>Select your school to explore its classes and products.</p>
+    </section>
+
+    <section class="schools-section" id="schools-section">
+      <h2>Select Your School</h2>
+
+      <div class="schools-grid">
+        @for (school of schools(); track school.id) {
+          <div class="school-card">
+            <div class="school-icon">🏫</div>
+            <h3>{{ school.name }}</h3>
+            <p>Explore school classes and products.</p>
+          </div>
+        }
+      </div>
+
+      @if (schools().length === 0) {
+        <p class="empty-message">No schools available right now.</p>
+      }
+    </section>
+
+  </main>
+
+  <footer class="home-footer">
+    <p>© 2026 The Uniform Shop. All rights reserved.</p>
+  </footer>
+
+</div>
