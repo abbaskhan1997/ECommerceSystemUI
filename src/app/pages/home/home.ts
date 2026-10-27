@@ -1,6 +1,7 @@
 import { Component, signal, OnInit, OnDestroy } from '@angular/core';
 import { SchoolService } from '../../services/school.service';
 import { AuthService } from '../../services/auth.service';
+import { PopupService } from '../../services/popup-service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,13 +23,22 @@ export class Home implements OnInit, OnDestroy {
   constructor(
     private schoolService: SchoolService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+     private popupService: PopupService
   ) {}
 
   ngOnInit() {
   this.getSchools();
 
   this.startSlider();
+}
+
+goToLogin() {
+  this.router.navigate(['/login']);
+}
+
+goToRegister() {
+  this.router.navigate(['/register']);
 }
 
   getSchools() {
@@ -68,9 +78,18 @@ startSlider() {
       ?.scrollIntoView({ behavior: 'smooth' });
   }
 
-  logout() {
-    this.authService.logout();
+  openSchool(school: any) {
+  if (!this.authService.isLoggedIn()) {
     this.router.navigate(['/login']);
+    return;
+  }
+
+  // Filhal logged-in user ke liye agla navigation
+  // school classes ka route confirm karne ke baad add karenge.
+}
+
+  logout() {
+    this.popupService.confirm('Are you sure you want to logout?');
   }
 
   // Clean up timer when leaving the page

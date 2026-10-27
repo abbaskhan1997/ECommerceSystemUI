@@ -6,9 +6,16 @@
       <h2>The Uniform Shop</h2>
     </div>
 
-    <button class="logout-btn" (click)="logout()">
-      Logout
-    </button>
+   
+<div class="auth-buttons">
+  @if (authService.isLoggedIn()) {
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  } @else {
+    <button class="login-btn" (click)="goToLogin()">Login</button>
+    <button class="register-btn" (click)="goToRegister()">Register</button>
+  }
+</div>
+
   </header>
 
   <main class="home-content">
@@ -97,7 +104,7 @@
 
       <div class="schools-grid">
         @for (school of schools(); track school.id) {
-          <div class="school-card">
+          <div class="school-card" (click)="openSchool(school)">
             <div class="school-icon">🏫</div>
             <h3>{{ school.name }}</h3>
             <p>Explore school classes and products.</p>
@@ -105,9 +112,7 @@
         }
       </div>
 
-      @if (schools().length === 0) {
-        <p class="empty-message">No schools available right now.</p>
-      }
+      
     </section>
 
   </main>

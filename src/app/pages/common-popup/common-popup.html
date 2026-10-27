@@ -4,7 +4,7 @@
       class="popup-box"
       [class.success]="popupService.type() === 'success'"
       [class.error]="popupService.type() === 'error'"
-      role="alert"
+      role="alertdialog"
       aria-live="polite"
     >
       <div class="popup-icon">
@@ -17,9 +17,15 @@
 
       <p>{{ popupService.message() }}</p>
 
-      <button type="button" (click)="popupService.close()">
-        OK
-      </button>
+      @if (popupService.mode() === 'confirm') {
+        <div class="popup-actions">
+          <button type="button" class="confirm-btn" (click)="confirmLogout()">Yes</button>
+
+          <button type="button" (click)="popupService.close()">No</button>
+        </div>
+      } @else {
+        <button type="button" (click)="popupService.close()">OK</button>
+      }
     </div>
   </div>
 }

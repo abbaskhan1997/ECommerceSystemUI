@@ -22,6 +22,10 @@ export class AuthService {
     return this.http.post(`${this.url}/register`, body, { responseType: 'text' });
   }
 
+  isLoggedIn(): boolean {
+  return !!localStorage.getItem('token');
+}
+
   getRole() {
     const token = localStorage.getItem('token');
 
