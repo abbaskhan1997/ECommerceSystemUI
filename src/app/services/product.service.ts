@@ -12,9 +12,30 @@ export class ProductService {
 
   totalProducts = signal(0);
 
-  getProducts(pageNumber: number = 1, search: string = '') {
-    return this.http.get(`${this.url}?pageNumber=${pageNumber}&search=${search}`);
+  getProducts(
+  pageNumber: number = 1,
+  search: string = '',
+  categoryId?: number,
+  schoolId?: number,
+  schoolClassId?: number
+) {
+  let params =
+    `?pageNumber=${pageNumber}&search=${encodeURIComponent(search)}`;
+
+  if (categoryId !== undefined) {
+    params += `&categoryId=${categoryId}`;
   }
+
+  if (schoolId !== undefined) {
+    params += `&schoolId=${schoolId}`;
+  }
+
+  if (schoolClassId !== undefined) {
+    params += `&schoolClassId=${schoolClassId}`;
+  }
+
+  return this.http.get(`${this.url}${params}`);
+}
 
   refreshProductCount() {
   this.getProducts(1, '').subscribe((data: any) => {

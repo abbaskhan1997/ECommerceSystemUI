@@ -4,10 +4,12 @@
   <p>Loading categories, please wait...</p>
 } @else if (categories().length > 0) {
   @for (item of categories(); track item.id) {
-    <div>
+  <div>
+    <button (click)="openCategory(item)">
       {{ item.name }}
-    </div>
-  }
+    </button>
+  </div>
+}
 } @else {
   <p>No categories are available for this class.</p>
 }
