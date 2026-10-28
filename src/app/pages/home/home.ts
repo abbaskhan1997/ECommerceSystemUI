@@ -84,8 +84,9 @@ startSlider() {
     return;
   }
 
-  // Filhal logged-in user ke liye agla navigation
-  // school classes ka route confirm karne ke baad add karenge.
+  this.router.navigate(['/classes'], {
+    queryParams: { schoolId: school.id }
+  });
 }
 
   logout() {

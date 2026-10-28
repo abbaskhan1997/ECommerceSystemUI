@@ -12,6 +12,8 @@ import { AdminUsers } from './pages/admin-users/admin-users'
 import { AdminCategories } from './pages/admin-categories/admin-categories'
 import { AdminSchools } from './pages/admin-schools/admin-schools'
 import { AdminClasses } from './pages/admin-classes/admin-classes';
+import { Classes } from './pages/classes/classes';
+import { Categories } from './pages/categories/categories';
 
 
 export const routes: Routes = [
@@ -79,6 +81,16 @@ export const routes: Routes = [
   path: 'admin-classes',
   component: AdminClasses
 },
+
+{
+  path: 'classes',
+  component: Classes
+},
+
+{
+  path: 'categories',
+  component: Categories
+}
 
 
 ];

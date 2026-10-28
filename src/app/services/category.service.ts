@@ -14,9 +14,15 @@ export class CategoryService {
   constructor(private http: HttpClient) {}
 
 
-  getCategories(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+  getCategories(schoolClassId?: number): Observable<any> {
+  if (schoolClassId !== undefined) {
+    return this.http.get<any>(
+      `${this.apiUrl}?schoolClassId=${schoolClassId}`
+    );
   }
+
+  return this.http.get<any>(this.apiUrl);
+}
 
   
   addCategory(category: any): Observable<any> {

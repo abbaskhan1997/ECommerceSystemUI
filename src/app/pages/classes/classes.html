@@ -1,0 +1,15 @@
+<h2>School Classes</h2>
+
+@if (isLoading()) {
+  <p>Loading classes, please wait...</p>
+} @else if (classes().length > 0) {
+  @for (item of classes(); track item.id) {
+  <div>
+    <button (click)="openClass(item)">
+      {{ item.name }}
+    </button>
+  </div>
+}
+} @else {
+  <p>No classes are available for this school.</p>
+}

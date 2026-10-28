@@ -1,0 +1,13 @@
+<h2>Categories</h2>
+
+@if (isLoading()) {
+  <p>Loading categories, please wait...</p>
+} @else if (categories().length > 0) {
+  @for (item of categories(); track item.id) {
+    <div>
+      {{ item.name }}
+    </div>
+  }
+} @else {
+  <p>No categories are available for this class.</p>
+}

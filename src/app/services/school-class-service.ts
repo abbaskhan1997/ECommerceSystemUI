@@ -3,16 +3,19 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SchoolClassService {
-
   private apiUrl = 'https://localhost:7223/api/SchoolClasses';
 
   constructor(private http: HttpClient) {}
 
   // Get all classes
-  getClasses(): Observable<any[]> {
+  getClasses(schoolId?: number): Observable<any[]> {
+    if (schoolId !== undefined) {
+      return this.http.get<any[]>(`${this.apiUrl}?schoolId=${schoolId}`);
+    }
+
     return this.http.get<any[]>(this.apiUrl);
   }
 
@@ -32,10 +35,7 @@ export class SchoolClassService {
   }
 
   // Delete a class
- deleteClass(id: number): Observable<string> {
-  return this.http.delete(
-    `${this.apiUrl}/${id}`,
-    { responseType: 'text' }
-  );
-}
+  deleteClass(id: number): Observable<string> {
+    return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
+  }
 }
