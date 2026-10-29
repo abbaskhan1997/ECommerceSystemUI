@@ -1,12 +1,5 @@
 
 <div class="categories-container">
-  <header class="categories-header">
-    <div class="brand">
-      <h2>The Uniform Shop</h2>
-      <p>School essentials, all in one place</p>
-    </div>
-  </header>
-
   <main class="categories-content">
     <section class="welcome-section">
       <span class="section-label">SHOP BY CATEGORY</span>
@@ -27,10 +20,9 @@
                   alt="School uniforms, shirts and trousers"
                 />
               } @else if (item.name.toLowerCase().includes('footwear')) {
-                <img
-                  src="https://images.unsplash.com/photo- shoe?auto=format&fit=crop&w=700&q=80"
-                  alt="School footwear"
-                />
+                <div class="category-placeholder">
+                  <span>👟</span>
+                </div>
               } @else if (item.name.toLowerCase().includes('book')) {
                 <img
                   src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=700&q=80"
@@ -64,8 +56,4 @@
       </p>
     }
   </main>
-
-  <footer class="categories-footer">
-    <p>© The Uniform Shop. All rights reserved.</p>
-  </footer>
 </div>

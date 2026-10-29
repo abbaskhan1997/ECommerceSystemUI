@@ -1,11 +1,68 @@
-<h1>Products</h1>
 
-@for (product of products(); track product.id) {
-  <a [routerLink]="['/products', product.id]">
-    <div>
-      <h2>{{ product.name }}</h2>
-      <p>Price: {{ product.price }}</p>
-      <p>Stock: {{ product.stockQuantity }}</p>
-    </div>
-  </a>
-}
+<div class="products-container">
+  <main class="products-content">
+
+    <!-- Page heading -->
+    <section class="welcome-section">
+      <span class="section-label">OUR PRODUCTS</span>
+      <h1>Explore Products</h1>
+      <p>Find the school essentials you need, all in one place.</p>
+    </section>
+
+    <!-- Products list -->
+    @if (products().length > 0) {
+      <section class="products-grid">
+        @for (product of products(); track product.id) {
+          <article class="product-card">
+
+            <div class="product-image">
+              <span>🛍️</span>
+            </div>
+
+            <div class="product-details">
+              <h2>{{ product.name }}</h2>
+
+              <p class="product-description">
+                School essentials for everyday use.
+              </p>
+
+              <div class="product-info">
+                <div class="product-price">
+                  <span class="info-label">Price</span>
+                  <strong>Rs. {{ product.price }}</strong>
+                </div>
+
+                <div class="product-stock">
+                  <span class="info-label">Availability</span>
+                  @if (product.stockQuantity > 0) {
+                    <span class="stock-available">
+                      In Stock ({{ product.stockQuantity }})
+                    </span>
+                  } @else {
+                    <span class="stock-unavailable">Out of Stock</span>
+                  }
+                </div>
+              </div>
+
+              <a
+                class="view-product-btn"
+                [routerLink]="['/products', product.id]"
+              >
+                View Product
+                <span>→</span>
+              </a>
+            </div>
+
+          </article>
+        }
+      </section>
+    } @else {
+      <div class="empty-state">
+        <span>📦</span>
+        <h3>No Products Available</h3>
+        <p>There are no products available in this category yet.</p>
+      </div>
+    }
+
+  </main>
+</div>

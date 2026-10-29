@@ -1,15 +1,59 @@
-<h2>School Classes</h2>
 
-@if (isLoading()) {
-  <p>Loading classes, please wait...</p>
-} @else if (classes().length > 0) {
-  @for (item of classes(); track item.id) {
-  <div>
-    <button (click)="openClass(item)">
-      {{ item.name }}
-    </button>
-  </div>
-}
-} @else {
-  <p>No classes are available for this school.</p>
-}
+<div class="classes-container">
+  <main class="classes-content">
+
+    <!-- Page heading -->
+    <section class="welcome-section">
+      <span class="section-label">FIND YOUR CLASS</span>
+      <h1>School Classes</h1>
+      <p>Select your class to explore the available categories.</p>
+    </section>
+
+    <!-- Loading state -->
+    @if (isLoading()) {
+      <div class="status-message">
+        <span class="loading-icon">⏳</span>
+        <p>Loading classes, please wait...</p>
+      </div>
+    } @else if (classes().length > 0) {
+
+      <!-- Classes grid -->
+      <section class="classes-grid">
+        @for (item of classes(); track item.id) {
+          <article class="class-card">
+
+            <div class="class-icon">
+              <span>🎓</span>
+            </div>
+
+            <div class="class-details">
+              <h3>{{ item.name }}</h3>
+              <p>Explore uniforms, books and other school essentials.</p>
+
+              <button
+                type="button"
+                class="explore-btn"
+                (click)="openClass(item)"
+              >
+                Explore Class
+                <span>→</span>
+              </button>
+            </div>
+
+          </article>
+        }
+      </section>
+
+    } @else {
+
+      <!-- Empty state -->
+      <div class="status-message">
+        <span class="empty-icon">📚</span>
+        <h3>No Classes Available</h3>
+        <p>No classes are available for this school.</p>
+      </div>
+
+    }
+
+  </main>
+</div>
