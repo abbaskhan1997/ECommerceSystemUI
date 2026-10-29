@@ -1,0 +1,111 @@
+/* Main footer */
+.site-footer {
+  background-color: #121927;
+  color: #ffffff;
+  padding: 45px 24px 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Footer columns container */
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 35px;
+}
+
+/* Shop information */
+.footer-brand h2 {
+  margin: 0 0 15px;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.footer-brand p {
+  max-width: 350px;
+  color: #cbd5e1;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* Footer headings */
+.footer-links h3,
+.footer-social h3 {
+  margin: 0 0 18px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* Footer links */
+.footer-links a {
+  display: block;
+  width: fit-content;
+  margin-bottom: 12px;
+  color: #cbd5e1;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover,
+.social-links a:hover {
+  color: #60a5fa;
+}
+
+/* Social media links */
+.social-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.social-links a {
+  color: #cbd5e1;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+/* Copyright section */
+.footer-bottom {
+  border-top: 1px solid #374151;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.footer-bottom p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Tablet and mobile layout */
+@media (max-width: 768px) {
+  .footer-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-footer {
+    padding: 35px 20px 0;
+  }
+
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .footer-brand {
+    grid-column: auto;
+  }
+}
