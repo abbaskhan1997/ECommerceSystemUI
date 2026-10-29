@@ -1,15 +1,71 @@
-<h2>Categories</h2>
 
-@if (isLoading()) {
-  <p>Loading categories, please wait...</p>
-} @else if (categories().length > 0) {
-  @for (item of categories(); track item.id) {
-  <div>
-    <button (click)="openCategory(item)">
-      {{ item.name }}
-    </button>
-  </div>
-}
-} @else {
-  <p>No categories are available for this class.</p>
-}
+<div class="categories-container">
+  <header class="categories-header">
+    <div class="brand">
+      <h2>The Uniform Shop</h2>
+      <p>School essentials, all in one place</p>
+    </div>
+  </header>
+
+  <main class="categories-content">
+    <section class="welcome-section">
+      <span class="section-label">SHOP BY CATEGORY</span>
+      <h1>Explore Categories</h1>
+      <p>Choose a category to find the products you need.</p>
+    </section>
+
+    @if (isLoading()) {
+      <p class="status-message">Loading categories, please wait...</p>
+    } @else if (categories().length > 0) {
+      <section class="categories-grid">
+        @for (item of categories(); track item.id) {
+          <article class="category-card">
+            <div class="category-image">
+              @if (item.name.toLowerCase().includes('uniform')) {
+                <img
+                  src="https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=700&q=80"
+                  alt="School uniforms, shirts and trousers"
+                />
+              } @else if (item.name.toLowerCase().includes('footwear')) {
+                <img
+                  src="https://images.unsplash.com/photo- shoe?auto=format&fit=crop&w=700&q=80"
+                  alt="School footwear"
+                />
+              } @else if (item.name.toLowerCase().includes('book')) {
+                <img
+                  src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=700&q=80"
+                  alt="Books and school supplies"
+                />
+              } @else {
+                <div class="category-placeholder">
+                  <span>✦</span>
+                </div>
+              }
+            </div>
+
+            <div class="category-details">
+              <h3>{{ item.name }}</h3>
+              <p>Explore products in this category.</p>
+
+              <button
+                type="button"
+                class="explore-btn"
+                (click)="openCategory(item)"
+              >
+                Explore Category <span>→</span>
+              </button>
+            </div>
+          </article>
+        }
+      </section>
+    } @else {
+      <p class="status-message">
+        No categories are available for this class.
+      </p>
+    }
+  </main>
+
+  <footer class="categories-footer">
+    <p>© The Uniform Shop. All rights reserved.</p>
+  </footer>
+</div>

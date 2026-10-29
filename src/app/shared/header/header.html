@@ -1,0 +1,21 @@
+
+<header class="site-header">
+  <div class="brand">
+    <h2>The Uniform Shop</h2>
+    <p>School essentials, all in one place</p>
+  </div>
+
+  <nav class="header-actions">
+    <a routerLink="/">Home</a>
+    <a routerLink="/products">Products</a>
+
+    @if (isLoggedIn()) {
+      <button type="button" class="logout-btn" (click)="logout()">
+        Logout
+      </button>
+    } @else {
+      <a routerLink="/login">Login</a>
+      <a routerLink="/register">Register</a>
+    }
+  </nav>
+</header>

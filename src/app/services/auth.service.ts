@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 interface LoginResponse {
@@ -10,7 +11,14 @@ interface LoginResponse {
 })
 export class AuthService {
   private url = 'https://localhost:7223/api/Auth';
-  constructor(private http: HttpClient) {}
+
+  // Current login status ko reactive rakhega
+  private loginStatus = signal(false);
+
+  constructor(private http: HttpClient) {
+    // App start hone par saved token check karo
+    this.loginStatus.set(!!localStorage.getItem('token'));
+  }
 
   login(email: string, password: string) {
     const body = { email, password };
@@ -19,12 +27,20 @@ export class AuthService {
 
   register(name: string, email: string, password: string) {
     const body = { name, email, password };
-    return this.http.post(`${this.url}/register`, body, { responseType: 'text' });
+
+    return this.http.post(`${this.url}/register`, body, {
+      responseType: 'text',
+    });
   }
 
   isLoggedIn(): boolean {
-  return !!localStorage.getItem('token');
-}
+    return this.loginStatus();
+  }
+
+  // Token save hone ke baad login status update karo
+  refreshLoginStatus(): void {
+    this.loginStatus.set(!!localStorage.getItem('token'));
+  }
 
   getRole() {
     const token = localStorage.getItem('token');
@@ -37,26 +53,32 @@ export class AuthService {
     const decodedPayload = atob(payload);
     const claims = JSON.parse(decodedPayload);
 
-    return claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+    return claims[
+      'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+    ];
   }
 
-  logout() {
+  logout(): void {
     localStorage.removeItem('token');
+    this.loginStatus.set(false);
   }
 
   forgotPassword(email: string) {
     const body = { email };
-    return this.http.post('https://localhost:7223/api/Users/forgot-password', body);
+
+    return this.http.post(
+      'https://localhost:7223/api/Users/forgot-password',
+      body
+    );
   }
 
   resetPassword(token: string, newPassword: string) {
-    const body = {
-      token,
-      newPassword,
-    };
+    const body = { token, newPassword };
 
-    return this.http.post('https://localhost:7223/api/Users/reset-password', body, {
-      responseType: 'text',
-    });
+    return this.http.post(
+      'https://localhost:7223/api/Users/reset-password',
+      body,
+      { responseType: 'text' }
+    );
   }
 }

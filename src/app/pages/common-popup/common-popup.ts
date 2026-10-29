@@ -19,6 +19,7 @@ export class CommonPopup {
   confirmLogout(): void {
     this.authService.logout();
     this.popupService.close();
+    this.popupService.show('logged out successfully.', 'success');
     this.router.navigate(['/login']);
   }
 }

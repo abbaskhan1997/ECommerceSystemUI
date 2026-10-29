@@ -1,17 +1,16 @@
+
 import { Component, signal, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { SchoolService } from '../../services/school.service';
 import { AuthService } from '../../services/auth.service';
-import { PopupService } from '../../services/popup-service';
-import { Router } from '@angular/router';
 
 @Component({
-  imports: [],
   selector: 'app-home',
+  imports: [],
   styleUrl: './home.css',
   templateUrl: './home.html',
 })
 export class Home implements OnInit, OnDestroy {
-
   schools = signal<any[]>([]);
 
   // Current visible slide
@@ -23,78 +22,70 @@ export class Home implements OnInit, OnDestroy {
   constructor(
     private schoolService: SchoolService,
     private authService: AuthService,
-    private router: Router,
-     private popupService: PopupService
+    private router: Router
   ) {}
 
-  ngOnInit() {
-  this.getSchools();
+  ngOnInit(): void {
+    this.getSchools();
+    this.startSlider();
+  }
 
-  this.startSlider();
-}
+  goToLogin(): void {
+    this.router.navigate(['/login']);
+  }
 
-goToLogin() {
-  this.router.navigate(['/login']);
-}
+  goToRegister(): void {
+    this.router.navigate(['/register']);
+  }
 
-goToRegister() {
-  this.router.navigate(['/register']);
-}
-
-  getSchools() {
+  getSchools(): void {
     this.schoolService.getSchools().subscribe((data) => {
       this.schools.set(data as any[]);
     });
   }
 
   // Move to next slide
-   nextSlide() {
+  nextSlide(): void {
     this.activeSlide.update(current => (current + 1) % 3);
   }
 
   // Move to previous slide
-   previousSlide() {
+  previousSlide(): void {
     this.activeSlide.update(current => (current + 2) % 3);
   }
 
   // Open a specific slide using dots
- goToSlide(index: number) {
+  goToSlide(index: number): void {
     this.activeSlide.set(index);
   }
 
   // Automatically change slide every 4 seconds
-
-startSlider() {
-  this.sliderTimer = setInterval(() => {
-    this.nextSlide();
-  }, 4000);
-}
-
-
+  startSlider(): void {
+    this.sliderTimer = setInterval(() => {
+      this.nextSlide();
+    }, 4000);
+  }
 
   // Scroll down to the school list
-  scrollToSchools() {
+  scrollToSchools(): void {
     document.getElementById('schools-section')
       ?.scrollIntoView({ behavior: 'smooth' });
   }
 
-  openSchool(school: any) {
-  if (!this.authService.isLoggedIn()) {
-    this.router.navigate(['/login']);
-    return;
-  }
+  // Open selected school
+  openSchool(school: any): void {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
 
-  this.router.navigate(['/classes'], {
-    queryParams: { schoolId: school.id }
-  });
-}
-
-  logout() {
-    this.popupService.confirm('Are you sure you want to logout?');
+    this.router.navigate(['/classes'], {
+      queryParams: { schoolId: school.id }
+    });
   }
 
   // Clean up timer when leaving the page
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.sliderTimer) {
       clearInterval(this.sliderTimer);
     }

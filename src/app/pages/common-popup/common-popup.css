@@ -1,3 +1,4 @@
+
 .popup-overlay {
   position: fixed;
   inset: 0;
@@ -18,6 +19,19 @@
   border-radius: 18px;
   text-align: center;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  font-family: Arial, sans-serif;
+  animation: popupAppear 0.2s ease-out;
+}
+
+.popup-box p {
+  margin: 0 0 20px;
+  color: #333;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
 }
 
 .popup-icon {
@@ -29,7 +43,7 @@
   justify-content: center;
   align-items: center;
   font-size: 28px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .success .popup-icon {
@@ -42,22 +56,18 @@
   background: #fee2e2;
 }
 
-.popup-box p {
-  margin: 0 0 20px;
-  color: #333;
-  overflow-wrap: anywhere;
-}
-
 .popup-box button {
   min-width: 90px;
   padding: 10px 20px;
   border: none;
   border-radius: 6px;
   background: #121927;
-  color: white;
+  color: #fff;
   cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
 }
-
 
 .popup-actions {
   display: flex;
@@ -70,11 +80,7 @@
 .popup-actions button {
   min-width: 100px;
   padding: 10px 18px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
 }
-
 
 .popup-box button:hover {
   background: #1d4ed8;
