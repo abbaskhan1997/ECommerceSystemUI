@@ -47,6 +47,17 @@ export class ProductService {
     return this.http.get(`${this.url}/${id}`);
   }
 
+  uploadProductImage(image: File) {
+  const formData = new FormData();
+
+  formData.append('image', image);
+
+  return this.http.post<{ imageUrl: string }>(
+    `${this.url}/upload-image`,
+    formData
+  );
+}
+
   addProduct(product: any) {
   return this.http.post(this.url, product).pipe(
     tap(() => this.refreshProductCount())

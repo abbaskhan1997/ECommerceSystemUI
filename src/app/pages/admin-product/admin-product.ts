@@ -19,14 +19,19 @@ export class AdminProduct {
   showSuccessPopup = false;
   editingProductId: number | null = null;
   deleteProductId: number | null = null;
+  existingImageUrl: string | null = null;
   showDeletePopup = false;
   showProductForm = false;
+  isSaving = false;
 
   searchText = '';
 
   // pagination
   currentPage = 1;
   pageSize = 10;
+
+  selectedImage: File | null = null;
+  imagePreview: string | null = null;
 
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
@@ -65,6 +70,11 @@ export class AdminProduct {
     this.categoryId = 0;
     this.schoolId = 0;
     this.schoolClassId = 0;
+
+    // Clear image selection and preview
+    this.selectedImage = null;
+    this.imagePreview = null;
+    this.existingImageUrl = null;
   }
 
   // Search products by filter
@@ -74,9 +84,9 @@ export class AdminProduct {
   }
 
   onSearchChange() {
-  this.currentPage = 1; 
-  this.getProducts();
-}
+    this.currentPage = 1;
+    this.getProducts();
+  }
 
   totalProducts = 0;
 
@@ -123,6 +133,29 @@ export class AdminProduct {
   }
 
   addProduct() {
+    // Stop if a save request is already running
+    if (this.isSaving) {
+      return;
+    }
+
+    this.isSaving = true;
+
+    if (this.selectedImage) {
+      this.productService.uploadProductImage(this.selectedImage).subscribe({
+        next: (response) => {
+          this.saveProduct(response.imageUrl);
+        },
+        error: (error) => {
+          console.error('Image upload failed:', error);
+          this.isSaving = false;
+        },
+      });
+    } else {
+      this.saveProduct(null);
+    }
+  }
+
+  saveProduct(imageUrl: string | null) {
     const product = {
       name: this.name,
       description: this.description,
@@ -131,19 +164,31 @@ export class AdminProduct {
       categoryId: this.categoryId,
       schoolId: this.schoolId,
       schoolClassId: this.schoolClassId,
+      imageUrl: imageUrl,
     };
 
-    this.productService.addProduct(product).subscribe(
-      (response) => {
+    this.productService.addProduct(product).subscribe({
+      next: () => {
         this.showSuccessPopup = true;
-
         this.getProducts();
         this.resetForm();
+        this.isSaving = false;
       },
-      (error) => {
+      error: (error) => {
         console.error('Error adding product:', error);
+        this.isSaving = false;
       },
-    );
+    });
+  }
+
+  onImageSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      this.selectedImage = input.files[0];
+
+      this.imagePreview = URL.createObjectURL(this.selectedImage);
+    }
   }
 
   getProducts() {
@@ -157,40 +202,67 @@ export class AdminProduct {
     this.editingProductId = product.id;
     this.name = product.name;
     this.description = product.description;
+    this.existingImageUrl = product.imageUrl;
     this.price = product.price;
     this.stockQuantity = product.stockQuantity;
     this.categoryId = product.categoryId;
     this.schoolId = product.schoolId;
     this.schoolClassId = product.schoolClassId;
 
+    // Show existing product image
+    this.imagePreview = product.imageUrl ? `https://localhost:7223${product.imageUrl}` : null;
+
+    // No new image selected yet
+    this.selectedImage = null;
+
     this.showProductForm = true;
   }
 
   updateProduct() {
-    console.log('Update button clicked');
-    console.log('Editing ID:', this.editingProductId);
-
-    if (this.editingProductId !== null) {
-      const updatedProduct = {
-        id: this.editingProductId,
-        name: this.name,
-        description: this.description,
-        price: this.price,
-        stockQuantity: this.stockQuantity,
-        categoryId: this.categoryId,
-        schoolId: this.schoolId,
-        schoolClassId: this.schoolClassId,
-      };
-
-      this.productService
-        .updateProduct(this.editingProductId, updatedProduct)
-        .subscribe((response) => {
-          this.showSuccessPopup = true;
-          this.getProducts();
-          this.resetForm();
-          this.editingProductId = null;
-        });
+    if (this.editingProductId === null) {
+      return;
     }
+
+    // If a new image is selected, upload it first
+    if (this.selectedImage) {
+      this.productService.uploadProductImage(this.selectedImage).subscribe({
+        next: (response) => {
+          this.saveUpdatedProduct(response.imageUrl);
+        },
+        error: (error) => {
+          console.error('Image upload failed:', error);
+        },
+      });
+    } else {
+      // Keep the existing image if no new image is selected
+      this.saveUpdatedProduct(this.existingImageUrl);
+    }
+  }
+
+  saveUpdatedProduct(imageUrl: string | null) {
+    const updatedProduct = {
+      id: this.editingProductId,
+      name: this.name,
+      description: this.description,
+      price: this.price,
+      stockQuantity: this.stockQuantity,
+      categoryId: this.categoryId,
+      schoolId: this.schoolId,
+      schoolClassId: this.schoolClassId,
+      imageUrl: imageUrl,
+    };
+
+    this.productService.updateProduct(this.editingProductId!, updatedProduct).subscribe({
+      next: () => {
+        this.showSuccessPopup = true;
+        this.getProducts();
+        this.resetForm();
+        this.editingProductId = null;
+      },
+      error: (error) => {
+        console.error('Error updating product:', error);
+      },
+    });
   }
 
   deleteProduct(productId: number) {

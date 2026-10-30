@@ -123,6 +123,23 @@
           <textarea [(ngModel)]="description" placeholder="Enter product description"></textarea>
         </div>
 
+        <!-- Product Image -->
+        <div class="form-group">
+          <label>Product Image</label>
+
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            (change)="onImageSelected($event)"
+          />
+
+          @if (imagePreview) {
+            <div class="image-preview">
+              <img [src]="imagePreview" alt="Product Preview" />
+            </div>
+          }
+        </div>
+
         <!-- Price + Stock -->
         <div class="form-row">
           <div class="form-group">
@@ -193,7 +210,13 @@
               Update Product
             </button>
           } @else {
-            <button type="button" class="btn btn-add" (click)="addProduct()">Add Product</button>
+            <button
+  type="button"
+  class="btn btn-add"
+  (click)="addProduct()"
+  [disabled]="isSaving">
+  {{ isSaving ? 'Saving...' : 'Add Product' }}
+</button>
           }
         </div>
       </div>
