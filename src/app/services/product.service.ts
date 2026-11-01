@@ -58,8 +58,8 @@ export class ProductService {
   );
 }
 
-  addProduct(product: any) {
-  return this.http.post(this.url, product).pipe(
+ addProduct(product: any) {
+  return this.http.post<any>(this.url, product).pipe(
     tap(() => this.refreshProductCount())
   );
 }

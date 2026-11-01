@@ -4,9 +4,13 @@ import { ProductService } from '../../services/product.service';
 import { Router } from '@angular/router';
 import { SchoolService } from '../../services/school.service';
 import { CategoryService } from '../../services/category.service';
+import { ProductSizeService } from '../../services/product-size.service';
+import { PopupService } from '../../services/popup-service';
+import { CommonPopup } from '../../pages/common-popup/common-popup';
+import { forkJoin } from 'rxjs';
 
 @Component({
-  imports: [FormsModule],
+  imports: [FormsModule, CommonPopup],
   selector: 'app-admin-product',
   styleUrl: './admin-product.css',
   templateUrl: './admin-product.html',
@@ -16,6 +20,7 @@ export class AdminProduct {
   categories = signal<any[]>([]);
   schools = signal<any[]>([]);
   classes = signal<any[]>([]);
+  productSizes = signal<any[]>([]);
   showSuccessPopup = false;
   editingProductId: number | null = null;
   deleteProductId: number | null = null;
@@ -30,8 +35,13 @@ export class AdminProduct {
   currentPage = 1;
   pageSize = 10;
 
+  // for image
   selectedImage: File | null = null;
   imagePreview: string | null = null;
+
+  // for size and size quantity
+  newSize = '';
+  newSizeStock = 0;
 
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
@@ -53,6 +63,8 @@ export class AdminProduct {
     private router: Router,
     private schoolService: SchoolService,
     private categoryService: CategoryService,
+    private productSizeService: ProductSizeService,
+    private popupService:  PopupService,
   ) {}
 
   ngOnInit() {
@@ -75,6 +87,11 @@ export class AdminProduct {
     this.selectedImage = null;
     this.imagePreview = null;
     this.existingImageUrl = null;
+
+    // Reset product sizes
+    this.productSizes.set([]);
+    this.newSize = '';
+    this.newSizeStock = 0;
   }
 
   // Search products by filter
@@ -155,28 +172,130 @@ export class AdminProduct {
     }
   }
 
-  saveProduct(imageUrl: string | null) {
-    const product = {
-      name: this.name,
-      description: this.description,
-      price: this.price,
-      stockQuantity: this.stockQuantity,
-      categoryId: this.categoryId,
-      schoolId: this.schoolId,
-      schoolClassId: this.schoolClassId,
-      imageUrl: imageUrl,
-    };
+ saveProduct(imageUrl: string | null) {
+  const product = {
+    name: this.name,
+    description: this.description,
+    price: this.price,
+    stockQuantity: this.stockQuantity,
+    categoryId: this.categoryId,
+    schoolId: this.schoolId,
+    schoolClassId: this.schoolClassId,
+    imageUrl: imageUrl,
+  };
 
-    this.productService.addProduct(product).subscribe({
-      next: () => {
-        this.showSuccessPopup = true;
-        this.getProducts();
-        this.resetForm();
-        this.isSaving = false;
+  this.productService.addProduct(product).subscribe({
+    next: (response: any) => {
+
+      // Save sizes only if admin added any sizes
+      if (this.productSizes().length > 0) {
+        const sizeRequests = this.productSizes().map(size => {
+          const productSize = {
+            id: 0,
+            productId: response.id,
+            size: size.size,
+            stockQuantity: size.stockQuantity
+          };
+
+          return this.productSizeService.addProductSize(productSize);
+        });
+
+        // Wait until all sizes are saved
+       forkJoin(sizeRequests).subscribe({
+  next: () => this.finishProductSave(),
+  error: (error) => {
+    console.error('Error saving product sizes:', error);
+    this.isSaving = false;
+  }
+});
+
+      } else {
+        // No sizes added, save product only
+        this.finishProductSave();
+      }
+    },
+    error: (error) => {
+      console.error('Error adding product:', error);
+      this.isSaving = false;
+    },
+  });
+}
+
+finishProductSave() {
+  this.popupService.show(
+    'Product added successfully!',
+    'success'
+  );
+
+  this.getProducts();
+  this.resetForm();
+  this.showProductForm = false;
+  this.isSaving = false;
+}
+
+  getProductSizes(productId: number) {
+    this.productSizeService.getProductSizes(productId).subscribe({
+      next: (data: any) => {
+        this.productSizes.set(data);
       },
       error: (error) => {
-        console.error('Error adding product:', error);
-        this.isSaving = false;
+        console.error('Error loading product sizes:', error);
+      },
+    });
+  }
+
+addProductSize() {
+  if (!this.newSize.trim()) {
+    return;
+  }
+
+  this.productSizes.update(sizes => [
+    ...sizes,
+    {
+      id: 0,
+      size: this.newSize,
+      stockQuantity: this.newSizeStock
+    }
+  ]);
+
+  this.newSize = '';
+  this.newSizeStock = 0;
+
+  // Show popup
+  this.popupService.show(
+    
+    'Product size added successfully!',
+    'success'
+  );
+}
+
+  updateProductSize(productSize: any) {
+    const updatedSize = {
+      id: productSize.id,
+      productId: productSize.productId,
+      size: productSize.size,
+      stockQuantity: productSize.stockQuantity,
+    };
+
+    this.productSizeService.updateProductSize(productSize.id, updatedSize).subscribe({
+      next: () => {
+        this.getProductSizes(productSize.productId);
+      },
+      error: (error) => {
+        console.error('Error updating product size:', error);
+      },
+    });
+  }
+
+  deleteProductSize(id: number) {
+    this.productSizeService.deleteProductSize(id).subscribe({
+      next: () => {
+        if (this.editingProductId !== null) {
+          this.getProductSizes(this.editingProductId);
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting product size:', error);
       },
     });
   }
@@ -200,6 +319,7 @@ export class AdminProduct {
 
   editProduct(product: any) {
     this.editingProductId = product.id;
+    this.getProductSizes(product.id);
     this.name = product.name;
     this.description = product.description;
     this.existingImageUrl = product.imageUrl;
@@ -239,31 +359,68 @@ export class AdminProduct {
     }
   }
 
-  saveUpdatedProduct(imageUrl: string | null) {
-    const updatedProduct = {
-      id: this.editingProductId,
-      name: this.name,
-      description: this.description,
-      price: this.price,
-      stockQuantity: this.stockQuantity,
-      categoryId: this.categoryId,
-      schoolId: this.schoolId,
-      schoolClassId: this.schoolClassId,
-      imageUrl: imageUrl,
-    };
+ saveUpdatedProduct(imageUrl: string | null) {
+  const updatedProduct = {
+    id: this.editingProductId,
+    name: this.name,
+    description: this.description,
+    price: this.price,
+    stockQuantity: this.stockQuantity,
+    categoryId: this.categoryId,
+    schoolId: this.schoolId,
+    schoolClassId: this.schoolClassId,
+    imageUrl: imageUrl,
+  };
 
-    this.productService.updateProduct(this.editingProductId!, updatedProduct).subscribe({
-      next: () => {
-        this.showSuccessPopup = true;
-        this.getProducts();
-        this.resetForm();
-        this.editingProductId = null;
-      },
-      error: (error) => {
-        console.error('Error updating product:', error);
-      },
-    });
-  }
+  this.productService.updateProduct(this.editingProductId!, updatedProduct).subscribe({
+    next: () => {
+
+      // Find only newly added sizes
+      const newSizes = this.productSizes().filter(size => size.id === 0);
+
+      // Save new sizes in database
+      if (newSizes.length > 0) {
+
+        const sizeRequests = newSizes.map(size => {
+          const productSize = {
+            productId: this.editingProductId,
+            size: size.size,
+            stockQuantity: size.stockQuantity
+          };
+
+          return this.productSizeService.addProductSize(productSize);
+        });
+
+        forkJoin(sizeRequests).subscribe({
+          next: () => this.finishProductUpdate(),
+          error: (error) => {
+            console.error('Error adding new product sizes:', error);
+          }
+        });
+
+      } else {
+        // No new sizes, finish product update
+        this.finishProductUpdate();
+      }
+    },
+
+    error: (error) => {
+      console.error('Error updating product:', error);
+    },
+  });
+}
+
+finishProductUpdate() {
+  this.popupService.show(
+    'Product updated successfully!',
+    'success'
+  );
+
+  this.getProducts();
+  this.resetForm();
+  this.showProductForm = false;
+  this.editingProductId = null;
+}
 
   deleteProduct(productId: number) {
     this.productService.deleteProduct(productId).subscribe((response) => {
