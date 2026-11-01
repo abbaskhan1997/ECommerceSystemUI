@@ -94,6 +94,54 @@ export class AdminProduct {
     this.newSizeStock = 0;
   }
 
+  // validation method
+  validateProductForm(): boolean {
+
+  if (!this.name.trim()) {
+    this.popupService.show('Please enter product name.', 'error');
+    return false;
+  }
+
+  if (!this.description.trim()) {
+    this.popupService.show('Please enter product description.', 'error');
+    return false;
+  }
+
+  if (this.price <= 0 || !Number.isFinite(this.price)) {
+    this.popupService.show('Please enter a valid product price.', 'error');
+    return false;
+  }
+
+  if (this.stockQuantity < 0 || !Number.isFinite(this.stockQuantity)) {
+    this.popupService.show('Please enter a valid stock quantity.', 'error');
+    return false;
+  }
+
+  if (this.categoryId <= 0) {
+    this.popupService.show('Please select a category.', 'error');
+    return false;
+  }
+
+  if (this.schoolId <= 0) {
+    this.popupService.show('Please select a school.', 'error');
+    return false;
+  }
+
+  if (this.schoolClassId <= 0) {
+    this.popupService.show('Please select a class.', 'error');
+    return false;
+  }
+
+  // New products must have an image.
+  // Existing products can keep their current image.
+  if (!this.selectedImage && !this.existingImageUrl) {
+    this.popupService.show('Please select a product image.', 'error');
+    return false;
+  }
+
+  return true;
+}
+
   // Search products by filter
 
   get filteredProducts() {
@@ -149,28 +197,33 @@ export class AdminProduct {
     this.resetForm();
   }
 
-  addProduct() {
-    // Stop if a save request is already running
-    if (this.isSaving) {
-      return;
-    }
+ addProduct() {
 
-    this.isSaving = true;
-
-    if (this.selectedImage) {
-      this.productService.uploadProductImage(this.selectedImage).subscribe({
-        next: (response) => {
-          this.saveProduct(response.imageUrl);
-        },
-        error: (error) => {
-          console.error('Image upload failed:', error);
-          this.isSaving = false;
-        },
-      });
-    } else {
-      this.saveProduct(null);
-    }
+  if (this.isSaving) {
+    return;
   }
+
+  if (!this.validateProductForm()) {
+    return;
+  }
+
+  this.isSaving = true;
+
+  if (this.selectedImage) {
+    this.productService.uploadProductImage(this.selectedImage).subscribe({
+      next: (response) => {
+        this.saveProduct(response.imageUrl);
+      },
+      error: (error) => {
+        console.error('Image upload failed:', error);
+        this.isSaving = false;
+        this.popupService.show('Image upload failed.', 'error');
+      },
+    });
+  } else {
+    this.saveProduct(null);
+  }
+}
 
  saveProduct(imageUrl: string | null) {
   const product = {
@@ -339,25 +392,29 @@ addProductSize() {
   }
 
   updateProduct() {
-    if (this.editingProductId === null) {
-      return;
-    }
 
-    // If a new image is selected, upload it first
-    if (this.selectedImage) {
-      this.productService.uploadProductImage(this.selectedImage).subscribe({
-        next: (response) => {
-          this.saveUpdatedProduct(response.imageUrl);
-        },
-        error: (error) => {
-          console.error('Image upload failed:', error);
-        },
-      });
-    } else {
-      // Keep the existing image if no new image is selected
-      this.saveUpdatedProduct(this.existingImageUrl);
-    }
+  if (this.editingProductId === null) {
+    return;
   }
+
+  if (!this.validateProductForm()) {
+    return;
+  }
+
+  if (this.selectedImage) {
+    this.productService.uploadProductImage(this.selectedImage).subscribe({
+      next: (response) => {
+        this.saveUpdatedProduct(response.imageUrl);
+      },
+      error: (error) => {
+        console.error('Image upload failed:', error);
+        this.popupService.show('Image upload failed.', 'error');
+      },
+    });
+  } else {
+    this.saveUpdatedProduct(this.existingImageUrl);
+  }
+}
 
  saveUpdatedProduct(imageUrl: string | null) {
   const updatedProduct = {

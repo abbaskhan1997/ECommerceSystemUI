@@ -1,7 +1,9 @@
+
 <div class="products-page">
 
   <!-- Common Popup -->
-<app-common-popup></app-common-popup>
+  <app-common-popup></app-common-popup>
+
   <!-- Page Header -->
   <div class="page-header">
     <div>
@@ -131,7 +133,7 @@
 
         <!-- Product Name -->
         <div class="form-group">
-          <label>Name</label>
+          <label>Name <span class="required-star">*</span></label>
           <input
             type="text"
             [(ngModel)]="name"
@@ -141,7 +143,7 @@
 
         <!-- Description -->
         <div class="form-group">
-          <label>Description</label>
+          <label>Description <span class="required-star">*</span></label>
           <textarea
             [(ngModel)]="description"
             placeholder="Enter product description"
@@ -150,7 +152,7 @@
 
         <!-- Product Image -->
         <div class="form-group">
-          <label>Product Image</label>
+          <label>Product Image <span class="required-star">*</span></label>
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp"
@@ -167,7 +169,7 @@
         <!-- Price + Stock -->
         <div class="form-row">
           <div class="form-group">
-            <label>Price</label>
+            <label>Price <span class="required-star">*</span></label>
             <input
               type="number"
               [(ngModel)]="price"
@@ -176,7 +178,7 @@
           </div>
 
           <div class="form-group">
-            <label>Stock Quantity</label>
+            <label>Stock Quantity <span class="required-star">*</span></label>
             <input
               type="number"
               [(ngModel)]="stockQuantity"
@@ -188,7 +190,7 @@
         <!-- Category + School -->
         <div class="form-row">
           <div class="form-group">
-            <label>Category</label>
+            <label>Category <span class="required-star">*</span></label>
             <select [(ngModel)]="categoryId">
               <option [value]="0">Select Category</option>
 
@@ -201,7 +203,7 @@
           </div>
 
           <div class="form-group">
-            <label>School</label>
+            <label>School <span class="required-star">*</span></label>
             <select [(ngModel)]="schoolId">
               <option [value]="0">Select School</option>
 
@@ -216,7 +218,7 @@
 
         <!-- Class -->
         <div class="form-group">
-          <label>Class</label>
+          <label>Class <span class="required-star">*</span></label>
           <select [(ngModel)]="schoolClassId">
             <option [value]="0">Select Class</option>
 
@@ -312,4 +314,3 @@
     </div>
   }
 </div>
-

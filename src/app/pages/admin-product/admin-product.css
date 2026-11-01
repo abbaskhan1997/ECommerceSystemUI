@@ -395,6 +395,12 @@ tbody tr:hover {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
+.required-star {
+  color: red;
+  font-weight: bold;
+  margin-left: 3px;
+}
+
 
 /* ================================
    Mobile Responsive
