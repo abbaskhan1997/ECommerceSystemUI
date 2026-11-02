@@ -1,0 +1,28 @@
+<h2>My Cart ({{ totalItems() }} Items)</h2>
+
+@if (cartItems().length > 0) {
+  @for (item of cartItems(); track item.id) {
+    <div class="cart-item">
+      <h3>{{ item.product.name }}</h3>
+
+      <p>Size: {{ item.productSize?.size || 'No Size' }}</p>
+      <p>Price: Rs. {{ item.product.price }}</p>
+
+      <div class="quantity-controls">
+        <button (click)="decreaseQuantity(item)">-</button>
+
+        <span>{{ item.quantity }}</span>
+
+        <button (click)="increaseQuantity(item)">+</button>
+      </div>
+
+      <p>Subtotal: Rs. {{ item.product.price * item.quantity }}</p>
+
+      <button (click)="removeItem(item.id)">Remove</button>
+    </div>
+  }
+
+  <h3>Total: Rs. {{ totalAmount() }}</h3>
+} @else {
+  <p>Your cart is empty.</p>
+}

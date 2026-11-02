@@ -14,6 +14,7 @@ import { AdminSchools } from './pages/admin-schools/admin-schools'
 import { AdminClasses } from './pages/admin-classes/admin-classes';
 import { Classes } from './pages/classes/classes';
 import { Categories } from './pages/categories/categories';
+import { Cart } from './pages/cart/cart';
 
 
 export const routes: Routes = [
@@ -90,6 +91,11 @@ export const routes: Routes = [
 {
   path: 'categories',
   component: Categories
+},
+
+{
+  path: 'cart',
+  component: Cart
 }
 
 
