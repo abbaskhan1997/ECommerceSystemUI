@@ -91,6 +91,19 @@
 
             <input id="quantity" type="number" min="1" [(ngModel)]="quantity" />
           </div>
+
+          <!-- Add to Cart button -->
+          <div class="cart-action">
+            <button
+              type="button"
+              class="add-to-cart-btn"
+              (click)="addToCart()"
+              [disabled]="product()?.stockQuantity <= 0"
+            >
+              <span>🛒</span>
+              Add to Cart
+            </button>
+          </div>
         </div>
       </article>
     } @else {
