@@ -15,8 +15,16 @@
         @for (product of products(); track product.id) {
           <article class="product-card">
 
+            <!-- Product image -->
             <div class="product-image">
-              <span>🛍️</span>
+              @if (product.imageUrl) {
+                <img
+                  [src]="'https://localhost:7223' + product.imageUrl"
+                  [alt]="product.name"
+                />
+              } @else {
+                <span>🛍️</span>
+              }
             </div>
 
             <div class="product-details">

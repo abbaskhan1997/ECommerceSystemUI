@@ -63,13 +63,23 @@
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.09);
 }
 
-/* Product image placeholder */
+/* Product image */
 .product-image {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 190px;
+  height: 220px;
+  padding: 10px;
+  box-sizing: border-box;
   background: #eaf0f8;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .product-image span {
@@ -213,6 +223,6 @@
   }
 
   .product-image {
-    height: 170px;
+    height: 190px;
   }
 }

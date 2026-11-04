@@ -1,7 +1,5 @@
-
 <div class="product-detail-container">
   <main class="product-detail-content">
-
     <!-- Page heading -->
     <section class="welcome-section">
       <span class="section-label">PRODUCT INFORMATION</span>
@@ -11,10 +9,13 @@
 
     @if (product()) {
       <article class="product-detail-card">
-
-        <!-- Product visual -->
+        <!-- Product image -->
         <div class="product-visual">
-          <span>🛍️</span>
+          @if (product()?.imageUrl) {
+            <img [src]="'https://localhost:7223' + product()?.imageUrl" [alt]="product()?.name" />
+          } @else {
+            <span>🛍️</span>
+          }
         </div>
 
         <!-- Product information -->
@@ -25,25 +26,24 @@
             {{ product()?.description || 'No description available.' }}
           </p>
 
+          <!-- Price -->
           <div class="detail-row">
             <span class="detail-label">Price</span>
-            <strong class="product-price">
-              Rs. {{ product()?.price }}
-            </strong>
+            <strong class="product-price"> Rs. {{ product()?.price }} </strong>
           </div>
 
+          <!-- Availability -->
           <div class="detail-row">
             <span class="detail-label">Availability</span>
 
             @if (product()?.stockQuantity > 0) {
-              <span class="stock-available">
-                In Stock ({{ product()?.stockQuantity }})
-              </span>
+              <span class="stock-available"> In Stock ({{ product()?.stockQuantity }}) </span>
             } @else {
               <span class="stock-unavailable">Out of Stock</span>
             }
           </div>
 
+          <!-- Category -->
           <div class="detail-row">
             <span class="detail-label">Category</span>
             <span class="detail-value">
@@ -51,6 +51,7 @@
             </span>
           </div>
 
+          <!-- School -->
           <div class="detail-row">
             <span class="detail-label">School</span>
             <span class="detail-value">
@@ -58,6 +59,7 @@
             </span>
           </div>
 
+          <!-- Class -->
           <div class="detail-row">
             <span class="detail-label">Class</span>
             <span class="detail-value">
@@ -65,6 +67,30 @@
             </span>
           </div>
 
+          <!-- Size selection -->
+          @if (product()?.productSizes?.length > 0) {
+            <div class="detail-row">
+              <label class="detail-label" for="productSize"> Select Size </label>
+
+              <select id="productSize" (change)="selectedSizeId = +$any($event.target).value">
+                <option value="">Choose Size</option>
+
+                @for (size of product()?.productSizes; track size.id) {
+                  @if (size.stockQuantity > 0) {
+                    <option [value]="size.id">
+                      {{ size.size }}
+                    </option>
+                  }
+                }
+              </select>
+            </div>
+          }
+          <!-- Quantity selection -->
+          <div class="detail-row">
+            <label class="detail-label" for="quantity"> Quantity </label>
+
+            <input id="quantity" type="number" min="1" [(ngModel)]="quantity" />
+          </div>
         </div>
       </article>
     } @else {
@@ -74,6 +100,5 @@
         <p>Product information could not be displayed.</p>
       </div>
     }
-
   </main>
 </div>
