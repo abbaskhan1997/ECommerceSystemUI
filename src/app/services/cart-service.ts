@@ -30,7 +30,11 @@ export class CartService {
   }
 
   // Remove item from cart
-  removeFromCart(cartItemId: number) {
-    return this.http.delete(`${this.url}/${cartItemId}`);
-  }
+  // Remove item from cart
+removeFromCart(cartItemId: number) {
+  return this.http.delete(
+    `${this.url}/${cartItemId}`,
+    { responseType: 'text' }
+  );
+}
 }

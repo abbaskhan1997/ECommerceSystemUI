@@ -1,5 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CartService } from '../../services/cart-service';
+import { PopupService } from '../../services/popup-service';
 
 @Component({
   imports: [],
@@ -12,7 +13,10 @@ export class Cart implements OnInit {
   totalAmount = signal(0);
   totalItems = signal(0);
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private popupService: PopupService,
+  ) {}
 
   ngOnInit() {
     this.loadCart();
@@ -27,32 +31,71 @@ export class Cart implements OnInit {
       );
     });
   }
-  increaseQuantity(item: any) {
-    const newQuantity = item.quantity + 1;
+ // Increase cart item quantity
+increaseQuantity(item: any) {
 
-    this.cartService.updateQuantity(item.id, newQuantity).subscribe({
-      next: () => this.loadCart(),
-      error: (err) => alert(err.error),
-    });
-  }
+  // Calculate new quantity
+  const newQuantity = item.quantity + 1;
 
-  decreaseQuantity(item: any) {
-    if (item.quantity <= 1) {
-      return;
+  // Send updated quantity to backend
+  this.cartService.updateQuantity(item.id, newQuantity).subscribe({
+
+    // Reload cart after successful update
+    next: () => {
+      this.loadCart();
+    },
+
+    // Show error popup if update fails
+    error: (err) => {
+      this.popupService.show(err.error, 'error');
     }
+  });
+}
 
-    const newQuantity = item.quantity - 1;
+  // Decrease cart item quantity
+decreaseQuantity(item: any) {
 
-    this.cartService.updateQuantity(item.id, newQuantity).subscribe({
-      next: () => this.loadCart(),
-      error: (err) => alert(err.error),
-    });
+  // Do not allow quantity below 1
+  if (item.quantity <= 1) {
+    return;
   }
 
-  removeItem(cartItemId: number) {
-    this.cartService.removeFromCart(cartItemId).subscribe({
-      next: () => this.loadCart(),
-      error: (err) => alert(err.error),
-    });
-  }
+  // Calculate new quantity
+  const newQuantity = item.quantity - 1;
+
+  // Send updated quantity to backend
+  this.cartService.updateQuantity(item.id, newQuantity).subscribe({
+
+    // Reload cart after successful update
+    next: () => {
+      this.loadCart();
+    },
+
+    // Show error popup if update fails
+    error: (err) => {
+      this.popupService.show(err.error, 'error');
+    }
+  });
+}
+
+  // Remove item from cart
+removeItem(cartItemId: number) {
+
+  // Send remove request to backend
+  this.cartService.removeFromCart(cartItemId).subscribe({
+
+    // Reload cart after successful removal
+    next: () => {
+      this.loadCart();
+
+      // Show success popup
+      this.popupService.show('Item removed from cart successfully.', 'success');
+    },
+
+    // Show error popup if removal fails
+    error: (err) => {
+      this.popupService.show(err.error, 'error');
+    }
+  });
+}
 }
