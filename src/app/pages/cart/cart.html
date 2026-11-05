@@ -1,24 +1,42 @@
+
 <h2>My Cart ({{ totalItems() }} Items)</h2>
 
 @if (cartItems().length > 0) {
   @for (item of cartItems(); track item.id) {
     <div class="cart-item">
-      <h3>{{ item.product.name }}</h3>
 
-      <p>Size: {{ item.productSize?.size || 'No Size' }}</p>
-      <p>Price: Rs. {{ item.product.price }}</p>
-
-      <div class="quantity-controls">
-        <button (click)="decreaseQuantity(item)">-</button>
-
-        <span>{{ item.quantity }}</span>
-
-        <button (click)="increaseQuantity(item)">+</button>
+      <!-- Product image on the left -->
+      <div class="cart-image">
+        @if (item.product.imageUrl) {
+          <img
+            [src]="'https://localhost:7223' + item.product.imageUrl"
+            [alt]="item.product.name"
+          />
+        } @else {
+          <span>🛍️</span>
+        }
       </div>
 
-      <p>Subtotal: Rs. {{ item.product.price * item.quantity }}</p>
+      <!-- Product details in the middle -->
+      <div class="cart-details">
+        <h3>{{ item.product.name }}</h3>
 
-      <button (click)="removeItem(item.id)">Remove</button>
+        <p>Size: {{ item.productSize?.size || 'No Size' }}</p>
+        <p>Price: Rs. {{ item.product.price }}</p>
+
+        <div class="quantity-controls">
+          <button (click)="decreaseQuantity(item)">-</button>
+          <span>{{ item.quantity }}</span>
+          <button (click)="increaseQuantity(item)">+</button>
+        </div>
+      </div>
+
+      <!-- Subtotal and remove on the right -->
+      <div class="cart-summary">
+        <p>Subtotal: Rs. {{ item.product.price * item.quantity }}</p>
+        <button (click)="removeItem(item.id)">Remove</button>
+      </div>
+
     </div>
   }
 

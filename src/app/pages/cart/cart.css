@@ -6,7 +6,11 @@ h2 {
   margin-bottom: 25px;
 }
 
+/* Main cart item layout */
 .cart-item {
+  display: flex;
+  align-items: center;
+  gap: 22px;
   background: #ffffff;
   border: 1px solid #e8e8e8;
   border-radius: 12px;
@@ -20,18 +24,45 @@ h2 {
   box-shadow: 0 5px 18px rgba(0, 0, 0, 0.09);
 }
 
-.cart-item h3 {
+/* Product image on the left */
+.cart-image {
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cart-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Product details in the middle */
+.cart-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-details h3 {
   font-size: 20px;
   color: #222;
   margin: 0 0 15px;
 }
 
-.cart-item p {
+.cart-details p {
   font-size: 15px;
-  color: #666;
+  color: #2f34ff;
   margin: 10px 0;
 }
 
+/* Quantity controls */
 .quantity-controls {
   display: flex;
   align-items: center;
@@ -63,7 +94,20 @@ h2 {
   text-align: center;
 }
 
-.cart-item > button {
+/* Subtotal and remove section on the right */
+.cart-summary {
+  min-width: 170px;
+  text-align: right;
+}
+
+.cart-summary p {
+  font-size: 17px;
+  color: #222;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.cart-summary button {
   background: #fff0f0;
   color: #dc3545;
   border: none;
@@ -75,16 +119,12 @@ h2 {
   transition: 0.2s;
 }
 
-.cart-item > button:hover {
+.cart-summary button:hover {
   background: #dc3545;
   color: white;
 }
 
-.cart-item p:last-of-type {
-  color: #222;
-  font-weight: 700;
-}
-
+/* Cart grand total */
 h2 ~ h3 {
   background: #f7f9fc;
   border-radius: 10px;
@@ -94,6 +134,7 @@ h2 ~ h3 {
   color: #222;
 }
 
+/* Mobile responsive layout */
 @media (max-width: 600px) {
   h2 {
     font-size: 24px;
@@ -101,5 +142,31 @@ h2 ~ h3 {
 
   .cart-item {
     padding: 16px;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .cart-image {
+    width: 105px;
+    height: 105px;
+  }
+
+  .cart-details {
+    flex: 1;
+  }
+
+  .cart-details h3 {
+    font-size: 17px;
+  }
+
+  .cart-summary {
+    width: 100%;
+    text-align: left;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+  }
+
+  .cart-summary p {
+    margin-bottom: 12px;
   }
 }
