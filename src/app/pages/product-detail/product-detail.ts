@@ -89,6 +89,9 @@ export class ProductDetail {
     this.cartService.addToCart(cartItem).subscribe({
       // Show success message when product is added
       next: () => {
+        // Refresh navbar cart count
+        this.cartService.refreshCartCount();
+        // Show success popup
         this.popupService.show('Product added to cart successfully!', 'success');
       },
 

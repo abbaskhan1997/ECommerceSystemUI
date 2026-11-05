@@ -3,6 +3,7 @@
   display: block;
 }
 
+/* Header layout */
 .site-header {
   display: flex;
   justify-content: space-between;
@@ -13,18 +14,21 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
 
+/* Brand name */
 .brand h2 {
   margin: 0;
   color: #1d4ed8;
   font-size: 24px;
 }
 
+/* Brand subtitle */
 .brand p {
   margin: 6px 0 0;
   color: #64748b;
   font-size: 14px;
 }
 
+/* Navigation layout */
 .header-actions {
   display: flex;
   align-items: center;
@@ -32,7 +36,10 @@
   gap: 24px;
 }
 
+/* Navigation links */
 .header-actions a {
+  display: inline-flex;
+  align-items: center;
   color: #334155;
   text-decoration: none;
   font-size: 15px;
@@ -43,6 +50,27 @@
   color: #1d4ed8;
 }
 
+/* Cart link layout */
+.cart-link {
+  gap: 7px;
+}
+
+/* Cart item count badge */
+.cart-count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 50%;
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Logout button */
 .logout-btn {
   padding: 10px 16px;
   border: none;
@@ -58,6 +86,7 @@
   background: #b91c1c;
 }
 
+/* Mobile responsive layout */
 @media (max-width: 600px) {
   .site-header {
     padding: 16px 20px;
