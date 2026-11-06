@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 export class CartService {
   // Store total number of cart items
   cartCount = signal(0);
+  private countRequestId = 0;
 
   // Inject HttpClient using Dependency Injection
   constructor(private http: HttpClient) {}
@@ -36,10 +37,25 @@ export class CartService {
 
   // Refresh total cart item count from backend
   refreshCartCount() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.resetCartCount();
+      return;
+    }
+
+    const requestId = ++this.countRequestId;
     this.getCart().subscribe({
       next: (data: any) => {
+        if (
+          requestId !== this.countRequestId ||
+          token !== localStorage.getItem('token')
+        ) {
+          return;
+        }
+
         // Calculate total quantity of all cart items
-        const total = data.cartItems.reduce((sum: number, item: any) => sum + item.quantity, 0);
+        const cartItems = Array.isArray(data?.cartItems) ? data.cartItems : [];
+        const total = cartItems.reduce((sum: number, item: any) => sum + item.quantity, 0);
 
         // Update cart count signal
         this.cartCount.set(total);
@@ -47,9 +63,19 @@ export class CartService {
 
       // Set count to zero if cart is empty or unavailable
       error: () => {
-        this.cartCount.set(0);
+        if (
+          requestId === this.countRequestId &&
+          token === localStorage.getItem('token')
+        ) {
+          this.cartCount.set(0);
+        }
       },
     });
+  }
+
+  resetCartCount() {
+    this.countRequestId++;
+    this.cartCount.set(0);
   }
   
 }

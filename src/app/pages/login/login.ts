@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { PopupService } from '../../services/popup-service';
+import { CartService } from '../../services/cart-service';
 import { RouterLink, Router } from '@angular/router';
 import { timer } from 'rxjs';
 
@@ -19,6 +20,7 @@ export class Login {
   constructor(
     private authService: AuthService,
     private popupService: PopupService,
+    private cartService: CartService,
     private router: Router,
   ) {}
 
@@ -38,6 +40,8 @@ export class Login {
         // Save the authentication token
         localStorage.setItem('token', response.token);
         this.authService.refreshLoginStatus();
+        this.cartService.resetCartCount();
+        this.cartService.refreshCartCount();
 
         // Retrieve the user's role
         this.loginRole = this.authService.getRole();

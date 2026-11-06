@@ -7,6 +7,7 @@ import { UserService } from '../../services/user-service';
 import { CategoryService } from '../../services/category.service';
 import { SchoolService } from '../../services/school.service';
 import { SchoolClassService } from '../../services/school-class-service';
+import { CartService } from '../../services/cart-service';
 @Component({
   imports: [RouterLink],
   selector: 'app-admin-dashboard',
@@ -30,6 +31,7 @@ export class AdminDashboard {
     private categoryService: CategoryService,
     private schoolService: SchoolService,
     private schoolclassservice: SchoolClassService,
+    private cartService: CartService,
   ) {}
 
   ngOnInit() {
@@ -82,6 +84,7 @@ export class AdminDashboard {
 
   logout() {
     this.authService.logout();
+    this.cartService.resetCartCount();
 
     this.showLogoutPopup = false;
 

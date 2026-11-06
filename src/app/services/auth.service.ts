@@ -49,13 +49,35 @@ export class AuthService {
       return null;
     }
 
-    const payload = token.split('.')[1];
-    const decodedPayload = atob(payload);
-    const claims = JSON.parse(decodedPayload);
+    try {
+      const payload = token.split('.')[1];
+      if (!payload) {
+        return null;
+      }
 
-    return claims[
-      'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
-    ];
+      const base64Payload = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const decodedPayload = atob(
+        base64Payload.padEnd(Math.ceil(base64Payload.length / 4) * 4, '=')
+      );
+      const payloadBytes = Uint8Array.from(decodedPayload, (character) =>
+        character.charCodeAt(0)
+      );
+      const claims = JSON.parse(new TextDecoder().decode(payloadBytes));
+      const role =
+        claims[
+          'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+        ] ??
+        claims.role ??
+        claims.roles;
+
+      return Array.isArray(role)
+        ? role.find((value) => typeof value === 'string') ?? null
+        : typeof role === 'string'
+          ? role
+          : null;
+    } catch {
+      return null;
+    }
   }
 
   logout(): void {
