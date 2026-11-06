@@ -1,10 +1,8 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, signal, inject } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { CommonPopup } from './pages/common-popup/common-popup';
 import { Header } from './shared/header/header';
 import { Footer } from './shared/footer/footer';
-
-
 
 @Component({
   selector: 'app-root',
@@ -14,4 +12,10 @@ import { Footer } from './shared/footer/footer';
 })
 export class App {
   protected readonly title = signal('ECommerceUI');
+
+  private router = inject(Router);
+
+  isAdminRoute(): boolean {
+    return this.router.url.startsWith('/admin-');
+  }
 }
