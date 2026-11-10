@@ -16,13 +16,10 @@ export class Header {
   cartService = inject(CartService);
 
   isCustomer(): boolean {
-  const role = this.authService.getRole();
+    const role = this.authService.getRole();
 
-  console.log('Current role:', role);
-  console.log('Logged in:', this.authService.isLoggedIn());
-
-  return role === 'User';
-}
+    return role === 'User';
+  }
 
   // Load cart count when header starts for a logged-in user
   ngOnInit(): void {

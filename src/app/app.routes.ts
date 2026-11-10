@@ -1,3 +1,4 @@
+
 import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
 import { Login } from './pages/login/login';
@@ -8,95 +9,109 @@ import { Products } from './pages/products/products';
 import { ProductDetail } from './pages/product-detail/product-detail';
 import { AdminDashboard } from './pages/admin-dashboard/admin-dashboard';
 import { AdminProduct } from './pages/admin-product/admin-product';
-import { AdminUsers } from './pages/admin-users/admin-users'
-import { AdminCategories } from './pages/admin-categories/admin-categories'
-import { AdminSchools } from './pages/admin-schools/admin-schools'
+import { AdminUsers } from './pages/admin-users/admin-users';
+import { AdminCategories } from './pages/admin-categories/admin-categories';
+import { AdminSchools } from './pages/admin-schools/admin-schools';
 import { AdminClasses } from './pages/admin-classes/admin-classes';
 import { Classes } from './pages/classes/classes';
 import { Categories } from './pages/categories/categories';
 import { Cart } from './pages/cart/cart';
-
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
+  // Home: Customer and guest
   {
     path: '',
     component: Home,
+    canActivate: [authGuard],
+    data: { role: 'User', allowGuest: true }
   },
 
+  // Public authentication pages
   {
     path: 'login',
-    component: Login,
+    component: Login
   },
-
   {
     path: 'register',
-    component: Register,
+    component: Register
   },
-
   {
     path: 'forgot-password',
-    component: ForgotPassword,
+    component: ForgotPassword
   },
-
   {
     path: 'reset-password',
-    component: ResetPassword,
+    component: ResetPassword
   },
 
+  // Customer pages
   {
     path: 'products',
     component: Products,
+    canActivate: [authGuard],
+    data: { role: 'User' }
+  },
+  {
+    path: 'products/:id',
+    component: ProductDetail,
+    canActivate: [authGuard],
+    data: { role: 'User' }
+  },
+  {
+    path: 'classes',
+    component: Classes,
+    canActivate: [authGuard],
+    data: { role: 'User' }
+  },
+  {
+    path: 'categories',
+    component: Categories,
+    canActivate: [authGuard],
+    data: { role: 'User' }
+  },
+  {
+    path: 'cart',
+    component: Cart,
+    canActivate: [authGuard],
+    data: { role: 'User' }
   },
 
+  // Admin pages
   {
-  path: 'products/:id',
-  component: ProductDetail,
-},
-
-{
-  path: 'admin-dashboard',
-  component: AdminDashboard
-},
-
-{
-  path: 'admin-product',
-  component: AdminProduct
-},
-
-{
-  path: 'admin-user',
-  component: AdminUsers
-},
-
-{
-  path: 'admin-categories',
-  component: AdminCategories
-},
-
-{
-  path: 'admin-schools',
-  component: AdminSchools
-},
-
-{
-  path: 'admin-classes',
-  component: AdminClasses
-},
-
-{
-  path: 'classes',
-  component: Classes
-},
-
-{
-  path: 'categories',
-  component: Categories
-},
-
-{
-  path: 'cart',
-  component: Cart
-}
-
-
+    path: 'admin-dashboard',
+    component: AdminDashboard,
+    canActivate: [authGuard],
+    data: { role: 'Admin' }
+  },
+  {
+    path: 'admin-product',
+    component: AdminProduct,
+    canActivate: [authGuard],
+    data: { role: 'Admin' }
+  },
+  {
+    path: 'admin-user',
+    component: AdminUsers,
+    canActivate: [authGuard],
+    data: { role: 'Admin' }
+  },
+  {
+    path: 'admin-categories',
+    component: AdminCategories,
+    canActivate: [authGuard],
+    data: { role: 'Admin' }
+  },
+  {
+    path: 'admin-schools',
+    component: AdminSchools,
+    canActivate: [authGuard],
+    data: { role: 'Admin' }
+  },
+  {
+    path: 'admin-classes',
+    component: AdminClasses,
+    canActivate: [authGuard],
+    data: { role: 'Admin' }
+  }
 ];
