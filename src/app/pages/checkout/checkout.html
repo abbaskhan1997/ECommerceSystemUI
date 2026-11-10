@@ -1,0 +1,61 @@
+
+<div class="checkout-container">
+  <h2>Checkout</h2>
+
+  <!-- Order delivery form -->
+  <form #checkoutForm="ngForm" (ngSubmit)="placeOrder()">
+
+    <!-- Full Name -->
+    <div>
+      <label>Full Name <span class="required-star">*</span></label>
+      <input
+        type="text"
+        name="fullName"
+        [(ngModel)]="fullName"
+        required
+        placeholder="Enter your full name"
+      />
+    </div>
+
+    <!-- Phone -->
+    <div>
+      <label>Phone Number <span class="required-star">*</span></label>
+      <input
+        type="tel"
+        name="phone"
+        [(ngModel)]="phone"
+        required
+        placeholder="Enter your phone number"
+      />
+    </div>
+
+    <!-- Address -->
+    <div>
+      <label>Address <span class="required-star">*</span></label>
+      <textarea
+        name="address"
+        [(ngModel)]="address"
+        required
+        placeholder="Enter your complete address"
+      ></textarea>
+    </div>
+
+    <!-- City -->
+    <div>
+      <label>City <span class="required-star">*</span></label>
+      <input
+        type="text"
+        name="city"
+        [(ngModel)]="city"
+        required
+        placeholder="Enter your city"
+      />
+    </div>
+
+    <!-- Submit button -->
+    <button type="submit" [disabled]="checkoutForm.invalid || isSubmitting">
+      {{ isSubmitting ? 'Placing Order...' : 'Place Order' }}
+    </button>
+
+  </form>
+</div>

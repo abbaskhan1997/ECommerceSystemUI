@@ -1,0 +1,73 @@
+
+.checkout-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.checkout-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+.checkout-container form > div {
+  margin-bottom: 18px;
+}
+
+.checkout-container label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: 600;
+  color: #333;
+}
+
+.checkout-container input,
+.checkout-container textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.checkout-container textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.checkout-container input:focus,
+.checkout-container textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.checkout-container button {
+  width: 100%;
+  padding: 13px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.checkout-container button:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+.checkout-container p {
+  color: red;
+  margin-bottom: 15px;
+}
+
+.required-star {
+  color: red;
+  font-weight: bold;
+}

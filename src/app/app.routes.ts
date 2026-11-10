@@ -16,6 +16,7 @@ import { AdminClasses } from './pages/admin-classes/admin-classes';
 import { Classes } from './pages/classes/classes';
 import { Categories } from './pages/categories/categories';
 import { Cart } from './pages/cart/cart';
+import { Checkout } from './pages/checkout/checkout';
 import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
@@ -28,22 +29,10 @@ export const routes: Routes = [
   },
 
   // Public authentication pages
-  {
-    path: 'login',
-    component: Login
-  },
-  {
-    path: 'register',
-    component: Register
-  },
-  {
-    path: 'forgot-password',
-    component: ForgotPassword
-  },
-  {
-    path: 'reset-password',
-    component: ResetPassword
-  },
+  { path: 'login', component: Login },
+  { path: 'register', component: Register },
+  { path: 'forgot-password', component: ForgotPassword },
+  { path: 'reset-password', component: ResetPassword },
 
   // Customer pages
   {
@@ -73,6 +62,12 @@ export const routes: Routes = [
   {
     path: 'cart',
     component: Cart,
+    canActivate: [authGuard],
+    data: { role: 'User' }
+  },
+  {
+    path: 'checkout',
+    component: Checkout,
     canActivate: [authGuard],
     data: { role: 'User' }
   },
