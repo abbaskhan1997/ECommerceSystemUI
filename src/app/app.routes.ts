@@ -18,6 +18,7 @@ import { Categories } from './pages/categories/categories';
 import { Cart } from './pages/cart/cart';
 import { Checkout } from './pages/checkout/checkout';
 import { authGuard } from './guards/auth-guard';
+import { MyOrders } from './pages/my-orders/my-orders';
 
 export const routes: Routes = [
   // Home: Customer and guest
@@ -71,6 +72,13 @@ export const routes: Routes = [
     canActivate: [authGuard],
     data: { role: 'User' }
   },
+
+  {
+  path: 'my-orders',
+  component: MyOrders,
+  canActivate: [authGuard],
+  data: { role: 'User' }
+},
 
   // Admin pages
   {

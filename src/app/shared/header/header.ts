@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PopupService } from '../../services/popup-service';
 import { AuthService } from '../../services/auth.service';

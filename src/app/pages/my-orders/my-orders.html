@@ -1,0 +1,99 @@
+<div class="my-orders-container">
+  <h2>My Orders</h2>
+
+  <div class="orders-summary">
+    <div>
+      <h3>{{ orders().length }}</h3>
+      <p>Total Orders</p>
+    </div>
+    <div class="summary-icon">📦</div>
+  </div>
+
+  <!-- Loading message -->
+  @if (isLoading()) {
+    <p class="message">Loading your orders...</p>
+  }
+
+  <!-- Error message -->
+  @if (errorMessage()) {
+    <p class="error-message">{{ errorMessage() }}</p>
+  }
+
+  <!-- No orders found -->
+  @if (!isLoading() && !errorMessage() && orders().length === 0) {
+    <div class="empty-orders">
+      <h3>No Orders Yet</h3>
+      <p>You haven't placed any orders yet.</p>
+    </div>
+  }
+
+  <!-- Display customer orders -->
+  @if (!isLoading() && orders().length > 0) {
+    @for (order of orders(); track order.id) {
+      <div class="order-card">
+        <div class="order-header">
+          <h3>Order #{{ order.id }}</h3>
+          <span [class]="'order-status status-' + order.status.toLowerCase()">
+            {{ order.status }}
+          </span>
+          <button type="button" class="view-details-btn" (click)="toggleOrderDetails(order.id)">
+            {{ expandedOrderId() === order.id ? 'Hide Details' : 'View Details' }}
+          </button>
+        </div>
+
+        <div class="order-details">
+          <p>
+            <strong>Order Date:</strong>
+            {{ order.orderDate | date: 'mediumDate' }}
+          </p>
+
+          <p>
+            <strong>Total Amount:</strong>
+            Rs. {{ order.totalAmount }}
+          </p>
+
+          <p>
+            <strong>Payment Method:</strong>
+            {{ order.paymentMethod }}
+          </p>
+
+          <p>
+            <strong>Payment Status:</strong>
+            {{ order.paymentStatus }}
+          </p>
+        </div>
+        @if (expandedOrderId() === order.id) {
+          <div class="delivery-details">
+            <h4>Delivery Address</h4>
+
+            <p>{{ order.deliveryAddress?.fullName }}</p>
+            <p>{{ order.deliveryAddress?.phone }}</p>
+            <p>{{ order.deliveryAddress?.address }}</p>
+            <p>{{ order.deliveryAddress?.city }}</p>
+          </div>
+
+          <div class="order-items">
+            <h4>Ordered Products</h4>
+
+            @for (item of order.orderItems; track item.id) {
+              <div class="order-item">
+                <img
+                  [src]="'https://localhost:7223' + item.product?.imageUrl"
+                  [alt]="item.product?.name"
+                  class="ordered-product-image"
+                />
+                <span>{{ item.product?.name }}</span>
+
+                <span> Size: {{ item.productSize?.size || 'N/A' }} </span>
+
+                <span>Quantity: {{ item.quantity }}</span>
+
+                <span>Rs. {{ item.price }}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

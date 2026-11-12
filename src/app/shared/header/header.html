@@ -10,6 +10,7 @@
 
     @if (isLoggedIn()) {
       @if (isCustomer()) {
+        <a routerLink="/my-orders">My Orders</a>
         <a routerLink="/cart" class="cart-link">
           <span>🛒 Cart</span>
           <span class="cart-count">
