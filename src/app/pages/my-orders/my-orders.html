@@ -43,6 +43,11 @@
 
         <div class="order-details">
           <p>
+            <strong>School:</strong>
+            {{ order.orderItems[0]?.product?.school?.name || 'N/A' }}
+          </p>
+
+          <p>
             <strong>Order Date:</strong>
             {{ order.orderDate | date: 'mediumDate' }}
           </p>
