@@ -8,10 +8,9 @@ import { PopupService } from '../../services/popup-service';
   selector: 'app-admin-orders',
   imports: [DatePipe, FormsModule],
   templateUrl: './admin-orders.html',
-  styleUrl: './admin-orders.css'
+  styleUrl: './admin-orders.css',
 })
 export class AdminOrders implements OnInit {
-
   // Store all orders
   orders = signal<any[]>([]);
 
@@ -21,26 +20,23 @@ export class AdminOrders implements OnInit {
   // Store error message
   errorMessage = signal('');
 
-  // Available order statuses
-orderStatuses = [
-  'Pending',
-  'Confirmed',
-  'Processing',
-  'Shipped',
-  'Delivered',
-  'Cancelled'
-];
+  // Store the selected order details
+  selectedOrder = signal<any | null>(null);
 
-// Available payment statuses
-paymentStatuses = [
-  'Pending',
-  'Paid',
-  'Failed'
-];
+  // Show or hide order details
+  showOrderDetails = signal(false);
+
+  // Available order statuses
+  orderStatuses = ['Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+
+  // Available payment statuses
+  paymentStatuses = ['Pending', 'Paid', 'Failed'];
 
   // Inject OrdersService using DI
-  constructor(private ordersService: OrdersService,
-     private popupService: PopupService) {}
+  constructor(
+    private ordersService: OrdersService,
+    private popupService: PopupService,
+  ) {}
 
   // Automatically runs when component loads
   ngOnInit(): void {
@@ -61,55 +57,62 @@ paymentStatuses = [
         this.errorMessage.set('Unable to load orders.');
         this.isLoading.set(false);
         console.error(error);
-      }
+      },
     });
   }
 
   // Update order status
-updateStatus(orderId: number, status: string): void {
-
-  this.ordersService.updateOrderStatus(orderId, status).subscribe({
-    next: () => {
-      // Reload orders after successful update
-      this.loadOrders();
+  updateStatus(orderId: number, status: string): void {
+    this.ordersService.updateOrderStatus(orderId, status).subscribe({
+      next: () => {
+        // Reload orders after successful update
+        this.loadOrders();
         // Show the selected order status in popup
-      this.popupService.show(
-        `Order status ${status} successfully.`,
-        'success'
-      );
+        this.popupService.show(`Order status ${status} successfully.`, 'success');
+      },
+      error: (error) => {
+        console.error(error);
+        this.popupService.show(`Unable to update order status ${status}.`, 'error');
+      },
+    });
+  }
+
+  // Update payment status
+  updatePaymentStatus(orderId: number, paymentStatus: string): void {
+    this.ordersService.updatePaymentStatus(orderId, paymentStatus).subscribe({
+      next: () => {
+        this.loadOrders();
+        // Show the selected payment status in popup
+        this.popupService.show(`Payment status ${paymentStatus} successfully.`, 'success');
+      },
+      error: (error) => {
+        console.error(error);
+        this.popupService.show(`Unable to update payment status ${paymentStatus}.`, 'error');
+      },
+    });
+  }
+
+  // Get details of a specific order
+viewOrderDetails(orderId: number): void {
+  this.ordersService.getOrderById(orderId).subscribe({
+    next: (response) => {
+      this.selectedOrder.set(response);
+      this.showOrderDetails.set(true);
     },
     error: (error) => {
       console.error(error);
-       this.popupService.show(
-        `Unable to  order status  ${status}.`,
+      this.popupService.show(
+        'Unable to load order details.',
         'error'
       );
     }
   });
-
 }
 
-// Update payment status
-updatePaymentStatus(orderId: number, paymentStatus: string): void {
-
-  this.ordersService.updatePaymentStatus(orderId, paymentStatus).subscribe({
-    next: () => {
-      this.loadOrders();
-       // Show the selected payment status in popup
-      this.popupService.show(
-        `Payment status ${paymentStatus} successfully.`,
-        'success'
-      );
-    },
-    error: (error) => {
-      console.error(error);
-         this.popupService.show(
-        `Unable to  payment status  ${paymentStatus}.`,
-        'error'
-      );
-    }
-  });
-
+// Close order details
+closeOrderDetails(): void {
+  this.showOrderDetails.set(false);
+  this.selectedOrder.set(null);
 }
 
 }

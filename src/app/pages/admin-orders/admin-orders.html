@@ -25,6 +25,7 @@
             <th>Total Amount</th>
             <th>Order Status</th>
             <th>Payment Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
@@ -37,12 +38,9 @@
               <td>{{ order.orderDate | date: 'dd MMM yyyy' }}</td>
               <td>Rs. {{ order.totalAmount }}</td>
               <td>
-                <select
-                [ngModel]="order.status"
-  (ngModelChange)="updateStatus(order.id, $event)">
-                  [value]="order.status"
-                  (change)="updateStatus(order.id, $any($event.target).value)"
-                >
+                <select [ngModel]="order.status" (ngModelChange)="updateStatus(order.id, $event)">
+                  [value]="order.status" (change)="updateStatus(order.id,
+                  $any($event.target).value)" >
                   @for (status of orderStatuses; track status) {
                     <option [value]="status">
                       {{ status }}
@@ -52,11 +50,11 @@
               </td>
               <td>
                 <select
-                 [ngModel]="order.paymentStatus"
-  (ngModelChange)="updatePaymentStatus(order.id, $event)">
-                  [value]="order.paymentStatus"
-                  (change)="updatePaymentStatus(order.id, $any($event.target).value)"
+                  [ngModel]="order.paymentStatus"
+                  (ngModelChange)="updatePaymentStatus(order.id, $event)"
                 >
+                  [value]="order.paymentStatus" (change)="updatePaymentStatus(order.id,
+                  $any($event.target).value)" >
                   @for (status of paymentStatuses; track status) {
                     <option [value]="status">
                       {{ status }}
@@ -64,10 +62,66 @@
                   }
                 </select>
               </td>
+              <td>
+                <button type="button" (click)="viewOrderDetails(order.id)">View Details</button>
+              </td>
             </tr>
           }
         </tbody>
       </table>
     </div>
+
+    @if (showOrderDetails() && selectedOrder(); as order) {
+  <div class="order-details-overlay">
+    <div class="order-details-modal">
+
+      <div class="modal-header">
+        <h2>Order #{{ order.id }} Details</h2>
+        <button type="button" (click)="closeOrderDetails()">✕</button>
+      </div>
+
+      <h3>Customer Information</h3>
+      <p><strong>Name:</strong> {{ order.user?.name || 'N/A' }}</p>
+      <p><strong>Email:</strong> {{ order.user?.email || 'N/A' }}</p>
+
+      <h3>Delivery Address</h3>
+      <p><strong>Full Name:</strong> {{ order.deliveryAddress?.fullName || 'N/A' }}</p>
+      <p><strong>Phone:</strong> {{ order.deliveryAddress?.phone || 'N/A' }}</p>
+      <p><strong>Address:</strong> {{ order.deliveryAddress?.address || 'N/A' }}</p>
+      <p><strong>City:</strong> {{ order.deliveryAddress?.city || 'N/A' }}</p>
+
+      <h3>Ordered Products</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Size</th>
+            <th>Quantity</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of order.orderItems; track item.id) {
+            <tr>
+              <td>{{ item.product?.name || 'N/A' }}</td>
+              <td>{{ item.productSize?.sizeName || 'N/A' }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>Rs. {{ item.price }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <h3>Order Summary</h3>
+      <p><strong>Total Amount:</strong> Rs. {{ order.totalAmount }}</p>
+      <p><strong>Order Status:</strong> {{ order.status }}</p>
+      <p><strong>Payment Status:</strong> {{ order.paymentStatus }}</p>
+
+      <button type="button" (click)="closeOrderDetails()">Close</button>
+
+    </div>
+  </div>
+}
+
   }
 </div>
