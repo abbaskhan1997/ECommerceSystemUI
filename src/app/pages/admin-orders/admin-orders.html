@@ -1,0 +1,73 @@
+<div class="admin-orders-container">
+  <h2>Manage Orders</h2>
+
+  @if (isLoading()) {
+    <p>Loading orders...</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="error-message">{{ errorMessage() }}</p>
+  }
+
+  @if (!isLoading() && orders().length === 0 && !errorMessage()) {
+    <p>No orders found.</p>
+  }
+
+  @if (orders().length > 0) {
+    <div class="orders-table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Email</th>
+            <th>Order Date</th>
+            <th>Total Amount</th>
+            <th>Order Status</th>
+            <th>Payment Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (order of orders(); track order.id) {
+            <tr>
+              <td>#{{ order.id }}</td>
+              <td>{{ order.user?.name || 'N/A' }}</td>
+              <td>{{ order.user?.email || 'N/A' }}</td>
+              <td>{{ order.orderDate | date: 'dd MMM yyyy' }}</td>
+              <td>Rs. {{ order.totalAmount }}</td>
+              <td>
+                <select
+                [ngModel]="order.status"
+  (ngModelChange)="updateStatus(order.id, $event)">
+                  [value]="order.status"
+                  (change)="updateStatus(order.id, $any($event.target).value)"
+                >
+                  @for (status of orderStatuses; track status) {
+                    <option [value]="status">
+                      {{ status }}
+                    </option>
+                  }
+                </select>
+              </td>
+              <td>
+                <select
+                 [ngModel]="order.paymentStatus"
+  (ngModelChange)="updatePaymentStatus(order.id, $event)">
+                  [value]="order.paymentStatus"
+                  (change)="updatePaymentStatus(order.id, $any($event.target).value)"
+                >
+                  @for (status of paymentStatuses; track status) {
+                    <option [value]="status">
+                      {{ status }}
+                    </option>
+                  }
+                </select>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
