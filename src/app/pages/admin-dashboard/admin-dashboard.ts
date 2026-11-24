@@ -8,6 +8,7 @@ import { CategoryService } from '../../services/category.service';
 import { SchoolService } from '../../services/school.service';
 import { SchoolClassService } from '../../services/school-class-service';
 import { CartService } from '../../services/cart-service';
+import { OrdersService } from '../../services/orders-service';
 @Component({
   imports: [RouterLink],
   selector: 'app-admin-dashboard',
@@ -19,6 +20,7 @@ export class AdminDashboard {
   showLogoutSuccessPopup = false;
   logoutMessage = '';
   userCount = signal(0);
+  orderCount = signal(0);
   categoryCount = signal(0);
   schoolCount = signal(0);
   totalClasses = signal(0);
@@ -32,6 +34,7 @@ export class AdminDashboard {
     private schoolService: SchoolService,
     private schoolclassservice: SchoolClassService,
     private cartService: CartService,
+    private ordersService: OrdersService,
   ) {}
 
   ngOnInit() {
@@ -42,6 +45,16 @@ export class AdminDashboard {
       },
       error: (error: any) => {
         console.error('Failed to load classes count:', error);
+      },
+    });
+
+    // Load total orders count
+    this.ordersService.getOrdersCount().subscribe({
+      next: (response) => {
+        this.orderCount.set(response.totalOrders);
+      },
+      error: (error) => {
+        console.error('Failed to load orders count:', error);
       },
     });
 

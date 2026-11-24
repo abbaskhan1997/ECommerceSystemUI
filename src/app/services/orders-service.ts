@@ -40,6 +40,13 @@ export class OrdersService {
     );
   }
 
+  // Get total orders count for Admin Dashboard
+getOrdersCount() {
+  return this.http.get<{ totalOrders: number }>(
+    `${this.apiUrl}/admin/count`
+  );
+}   
+
   // Get a specific order for Admin
   getOrderById(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/admin/${id}`);
