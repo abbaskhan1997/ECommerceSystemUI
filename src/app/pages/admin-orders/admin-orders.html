@@ -1,19 +1,66 @@
+
 <div class="admin-orders-container">
   <h2>Manage Orders</h2>
+  <p>Manage and update your orders here.</p>
 
+  <!-- Search and Filters -->
+  <div class="search-filter-container">
+
+    <!-- Search orders -->
+    <input
+      type="text"
+      placeholder="Search by ID, customer, email or product..."
+      [ngModel]="searchText()"
+      (ngModelChange)="searchText.set($event)"
+    />
+
+    <!-- Filter by order status -->
+    <select
+      [ngModel]="selectedOrderStatus()"
+      (ngModelChange)="selectedOrderStatus.set($event)"
+    >
+      <option value="">All Order Statuses</option>
+
+      @for (status of orderStatuses; track status) {
+        <option [value]="status">{{ status }}</option>
+      }
+    </select>
+
+    <!-- Filter by payment status -->
+    <select
+      [ngModel]="selectedPaymentStatus()"
+      (ngModelChange)="selectedPaymentStatus.set($event)"
+    >
+      <option value="">All Payment Statuses</option>
+
+      @for (status of paymentStatuses; track status) {
+        <option [value]="status">{{ status }}</option>
+      }
+    </select>
+
+  </div>
+
+  <!-- Loading State -->
   @if (isLoading()) {
     <p>Loading orders...</p>
   }
 
+  <!-- Error Message -->
   @if (errorMessage()) {
     <p class="error-message">{{ errorMessage() }}</p>
   }
 
-  @if (!isLoading() && orders().length === 0 && !errorMessage()) {
-    <p>No orders found.</p>
+  <!-- No Orders Found -->
+  @if (!isLoading() && !errorMessage()) {
+    @if (orders().length === 0) {
+      <p>No orders found.</p>
+    } @else if (filteredOrders().length === 0) {
+      <p>No matching orders found.</p>
+    }
   }
 
-  @if (orders().length > 0) {
+  <!-- Orders Table -->
+  @if (filteredOrders().length > 0) {
     <div class="orders-table-wrapper">
       <table>
         <thead>
@@ -30,98 +77,148 @@
         </thead>
 
         <tbody>
-          @for (order of orders(); track order.id) {
+          @for (order of filteredOrders(); track order.id) {
             <tr>
               <td>#{{ order.id }}</td>
               <td>{{ order.user?.name || 'N/A' }}</td>
               <td>{{ order.user?.email || 'N/A' }}</td>
               <td>{{ order.orderDate | date: 'dd MMM yyyy' }}</td>
               <td>Rs. {{ order.totalAmount }}</td>
+
+              <!-- Update Order Status -->
               <td>
-                <select [ngModel]="order.status" (ngModelChange)="updateStatus(order.id, $event)">
-                  [value]="order.status" (change)="updateStatus(order.id,
-                  $any($event.target).value)" >
+                <select
+                  [ngModel]="order.status"
+                  (ngModelChange)="updateStatus(order.id, $event)"
+                >
                   @for (status of orderStatuses; track status) {
-                    <option [value]="status">
-                      {{ status }}
-                    </option>
+                    <option [value]="status">{{ status }}</option>
                   }
                 </select>
               </td>
+
+              <!-- Update Payment Status -->
               <td>
                 <select
                   [ngModel]="order.paymentStatus"
                   (ngModelChange)="updatePaymentStatus(order.id, $event)"
                 >
-                  [value]="order.paymentStatus" (change)="updatePaymentStatus(order.id,
-                  $any($event.target).value)" >
                   @for (status of paymentStatuses; track status) {
-                    <option [value]="status">
-                      {{ status }}
-                    </option>
+                    <option [value]="status">{{ status }}</option>
                   }
                 </select>
               </td>
+
+              <!-- View Order Details -->
               <td>
-                <button type="button" (click)="viewOrderDetails(order.id)">View Details</button>
+                <button
+                  type="button"
+                  (click)="viewOrderDetails(order.id)"
+                >
+                  View Details
+                </button>
               </td>
             </tr>
           }
         </tbody>
       </table>
     </div>
+  }
 
-    @if (showOrderDetails() && selectedOrder(); as order) {
-  <div class="order-details-overlay">
-    <div class="order-details-modal">
+  <!-- Order Details Modal -->
+  @if (showOrderDetails() && selectedOrder(); as order) {
+    <div class="order-details-overlay">
+      <div class="order-details-modal">
 
-      <div class="modal-header">
-        <h2>Order #{{ order.id }} Details</h2>
-        <button type="button" (click)="closeOrderDetails()">✕</button>
-      </div>
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h2>Order #{{ order.id }} Details</h2>
 
-      <h3>Customer Information</h3>
-      <p><strong>Name:</strong> {{ order.user?.name || 'N/A' }}</p>
-      <p><strong>Email:</strong> {{ order.user?.email || 'N/A' }}</p>
+          <button type="button" (click)="closeOrderDetails()">
+            ✕
+          </button>
+        </div>
 
-      <h3>Delivery Address</h3>
-      <p><strong>Full Name:</strong> {{ order.deliveryAddress?.fullName || 'N/A' }}</p>
-      <p><strong>Phone:</strong> {{ order.deliveryAddress?.phone || 'N/A' }}</p>
-      <p><strong>Address:</strong> {{ order.deliveryAddress?.address || 'N/A' }}</p>
-      <p><strong>City:</strong> {{ order.deliveryAddress?.city || 'N/A' }}</p>
+        <!-- Customer Information -->
+        <h3>Customer Information</h3>
 
-      <h3>Ordered Products</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th>Size</th>
-            <th>Quantity</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of order.orderItems; track item.id) {
+        <p>
+          <strong>Name:</strong> {{ order.user?.name || 'N/A' }}
+        </p>
+
+        <p>
+          <strong>Email:</strong> {{ order.user?.email || 'N/A' }}
+        </p>
+
+        <!-- Delivery Address -->
+        <h3>Delivery Address</h3>
+
+        <p>
+          <strong>Full Name:</strong>
+          {{ order.deliveryAddress?.fullName || 'N/A' }}
+        </p>
+
+        <p>
+          <strong>Phone:</strong>
+          {{ order.deliveryAddress?.phone || 'N/A' }}
+        </p>
+
+        <p>
+          <strong>Address:</strong>
+          {{ order.deliveryAddress?.address || 'N/A' }}
+        </p>
+
+        <p>
+          <strong>City:</strong>
+          {{ order.deliveryAddress?.city || 'N/A' }}
+        </p>
+
+        <!-- Ordered Products -->
+        <h3>Ordered Products</h3>
+
+        <table>
+          <thead>
             <tr>
-              <td>{{ item.product?.name || 'N/A' }}</td>
-              <td>{{ item.productSize?.sizeName || 'N/A' }}</td>
-              <td>{{ item.quantity }}</td>
-              <td>Rs. {{ item.price }}</td>
+              <th>Product</th>
+              <th>Size</th>
+              <th>Quantity</th>
+              <th>Price</th>
             </tr>
-          }
-        </tbody>
-      </table>
+          </thead>
 
-      <h3>Order Summary</h3>
-      <p><strong>Total Amount:</strong> Rs. {{ order.totalAmount }}</p>
-      <p><strong>Order Status:</strong> {{ order.status }}</p>
-      <p><strong>Payment Status:</strong> {{ order.paymentStatus }}</p>
+          <tbody>
+            @for (item of order.orderItems; track item.id) {
+              <tr>
+                <td>{{ item.product?.name || 'N/A' }}</td>
+                <td>{{ item.productSize?.sizeName || 'N/A' }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>Rs. {{ item.price }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
 
-      <button type="button" (click)="closeOrderDetails()">Close</button>
+        <!-- Order Summary -->
+        <h3>Order Summary</h3>
 
+        <p>
+          <strong>Total Amount:</strong> Rs. {{ order.totalAmount }}
+        </p>
+
+        <p>
+          <strong>Order Status:</strong> {{ order.status }}
+        </p>
+
+        <p>
+          <strong>Payment Status:</strong> {{ order.paymentStatus }}
+        </p>
+
+        <!-- Close Modal -->
+        <button type="button" (click)="closeOrderDetails()">
+          Close
+        </button>
+
+      </div>
     </div>
-  </div>
-}
-
   }
 </div>

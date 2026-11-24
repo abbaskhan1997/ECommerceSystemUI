@@ -1,7 +1,7 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { OrdersService } from '../../services/orders-service';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { OrdersService } from '../../services/orders-service';
 import { PopupService } from '../../services/popup-service';
 
 @Component({
@@ -11,39 +11,83 @@ import { PopupService } from '../../services/popup-service';
   styleUrl: './admin-orders.css',
 })
 export class AdminOrders implements OnInit {
-  // Store all orders
+  // ==================== Order State ====================
+
   orders = signal<any[]>([]);
-
-  // Loading state
   isLoading = signal(false);
-
-  // Store error message
   errorMessage = signal('');
 
-  // Store the selected order details
-  selectedOrder = signal<any | null>(null);
+  // ==================== Order Details State ====================
 
-  // Show or hide order details
+  selectedOrder = signal<any | null>(null);
   showOrderDetails = signal(false);
 
-  // Available order statuses
+  // ==================== Search and Filter State ====================
+
+  searchText = signal('');
+  selectedOrderStatus = signal('');
+  selectedPaymentStatus = signal('');
+
+  // ==================== Available Statuses ====================
+
   orderStatuses = ['Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
 
-  // Available payment statuses
   paymentStatuses = ['Pending', 'Paid', 'Failed'];
 
-  // Inject OrdersService using DI
+  // ==================== Search and Filter Logic ====================
+
+  // Search and filter logic
+  filteredOrders = computed(() => {
+    // Split search text into individual words
+    const searchWords = this.searchText().toLowerCase().trim().split(/\s+/);
+
+    return this.orders().filter((order) => {
+      // Combine all product names
+      const productNames = (order.orderItems ?? [])
+        .map((item: any) => item.product?.name || '')
+        .join(' ');
+
+      // Combine all searchable fields
+      const searchableText = [
+        order.id,
+        order.user?.name || '',
+        order.user?.email || '',
+        order.deliveryAddress?.phone || '',
+        productNames,
+      ]
+        .join(' ')
+        .toLowerCase();
+
+      // Check if all search words match
+      const matchesSearch = searchWords.every((word) => searchableText.includes(word));
+
+      // Filter by order status
+      const matchesOrderStatus =
+        !this.selectedOrderStatus() || order.status === this.selectedOrderStatus();
+
+      // Filter by payment status
+      const matchesPaymentStatus =
+        !this.selectedPaymentStatus() || order.paymentStatus === this.selectedPaymentStatus();
+
+      return matchesSearch && matchesOrderStatus && matchesPaymentStatus;
+    });
+  });
+
+  // ==================== Dependency Injection ====================
+
   constructor(
     private ordersService: OrdersService,
     private popupService: PopupService,
   ) {}
 
-  // Automatically runs when component loads
+  // ==================== Lifecycle Hook ====================
+
   ngOnInit(): void {
     this.loadOrders();
   }
 
-  // Get all orders from backend
+  // ==================== Load Orders ====================
+
   loadOrders(): void {
     this.isLoading.set(true);
     this.errorMessage.set('');
@@ -61,13 +105,12 @@ export class AdminOrders implements OnInit {
     });
   }
 
-  // Update order status
+  // ==================== Update Order Status ====================
+
   updateStatus(orderId: number, status: string): void {
     this.ordersService.updateOrderStatus(orderId, status).subscribe({
       next: () => {
-        // Reload orders after successful update
         this.loadOrders();
-        // Show the selected order status in popup
         this.popupService.show(`Order status ${status} successfully.`, 'success');
       },
       error: (error) => {
@@ -77,12 +120,12 @@ export class AdminOrders implements OnInit {
     });
   }
 
-  // Update payment status
+  // ==================== Update Payment Status ====================
+
   updatePaymentStatus(orderId: number, paymentStatus: string): void {
     this.ordersService.updatePaymentStatus(orderId, paymentStatus).subscribe({
       next: () => {
         this.loadOrders();
-        // Show the selected payment status in popup
         this.popupService.show(`Payment status ${paymentStatus} successfully.`, 'success');
       },
       error: (error) => {
@@ -92,27 +135,25 @@ export class AdminOrders implements OnInit {
     });
   }
 
-  // Get details of a specific order
-viewOrderDetails(orderId: number): void {
-  this.ordersService.getOrderById(orderId).subscribe({
-    next: (response) => {
-      this.selectedOrder.set(response);
-      this.showOrderDetails.set(true);
-    },
-    error: (error) => {
-      console.error(error);
-      this.popupService.show(
-        'Unable to load order details.',
-        'error'
-      );
-    }
-  });
-}
+  // ==================== View Order Details ====================
 
-// Close order details
-closeOrderDetails(): void {
-  this.showOrderDetails.set(false);
-  this.selectedOrder.set(null);
-}
+  viewOrderDetails(orderId: number): void {
+    this.ordersService.getOrderById(orderId).subscribe({
+      next: (response) => {
+        this.selectedOrder.set(response);
+        this.showOrderDetails.set(true);
+      },
+      error: (error) => {
+        console.error(error);
+        this.popupService.show('Unable to load order details.', 'error');
+      },
+    });
+  }
 
+  // ==================== Close Order Details ====================
+
+  closeOrderDetails(): void {
+    this.showOrderDetails.set(false);
+    this.selectedOrder.set(null);
+  }
 }
