@@ -12,6 +12,9 @@
   padding: 20px 6%;
   background: #ffffff;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  position: relative;
+  z-index: 1000;
+  overflow: visible;
 }
 
 /* Brand name */
@@ -86,6 +89,22 @@
   background: #b91c1c;
 }
 
+/* Global search layout */
+.header-search {
+  flex: 1;
+  min-width: 0;
+  max-width: 550px;
+  margin: 0 auto;
+}
+
+.brand {
+  flex-shrink: 0;
+}
+
+.header-actions {
+  flex-shrink: 0;
+}
+
 /* Mobile responsive layout */
 @media (max-width: 600px) {
   .site-header {
@@ -99,5 +118,15 @@
 
   .header-actions {
     gap: 14px;
+  }
+
+   .site-header {
+    flex-wrap: wrap;
+  }
+
+  .header-search {
+    order: 3;
+    flex: 0 0 100%;
+    max-width: 100%;
   }
 }

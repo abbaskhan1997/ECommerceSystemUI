@@ -4,6 +4,12 @@
     <p>School essentials, all in one place</p>
   </div>
 
+  @if (isLoggedIn() && isCustomer()) {
+    <div class="header-search">
+      <app-global-search></app-global-search>
+    </div>
+  }
+
   <nav class="header-actions">
     <a routerLink="/">Home</a>
     <a routerLink="/products">Products</a>
@@ -18,7 +24,9 @@
           </span>
         </a>
       }
-      <button type="button" class="logout-btn" (click)="logout()">Logout</button>
+      <button type="button" class="logout-btn" (click)="logout()">
+        Logout
+      </button>
     } @else {
       <a routerLink="/login">Login</a>
       <a routerLink="/register">Register</a>

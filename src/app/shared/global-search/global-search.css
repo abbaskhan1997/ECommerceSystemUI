@@ -1,0 +1,200 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Global search container */
+.global-search {
+  position: relative;
+  width: 100%;
+  max-width: 550px;
+  margin: 0 auto;
+  z-index: 1000;
+}
+
+/* Search form */
+.search-form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+}
+
+/* Search input */
+.search-input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px 0 0 8px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border-color: #2563eb;
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+/* Search button */
+.search-btn {
+  height: 44px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.search-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.search-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Search dropdown */
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-height: 420px;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  z-index: 1001;
+}
+
+/* Search result sections */
+.search-section {
+  padding: 8px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Section headings */
+.search-section h4 {
+  margin: 0;
+  padding: 8px 16px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Individual search result */
+.search-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.search-item:hover {
+  background: #eff6ff;
+}
+
+/* Result name */
+.search-item span {
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* School and class information */
+.search-item small {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+/* Loading and empty messages */
+.search-message {
+  margin: 0;
+  padding: 24px 16px;
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Error message */
+.error-message {
+  color: #dc2626;
+}
+
+/* View all results button */
+.view-all-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  background: #f8fafc;
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+
+.view-all-btn:hover {
+  background: #dbeafe;
+}
+
+/* Dropdown scrollbar */
+.search-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-dropdown::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.search-dropdown::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+/* Mobile responsive design */
+@media (max-width: 600px) {
+  .search-input {
+    font-size: 12px;
+    padding: 0 10px;
+  }
+
+  .search-btn {
+    padding: 0 12px;
+    font-size: 12px;
+  }
+
+  .search-dropdown {
+    max-height: 300px;
+  }
+
+  .search-item {
+    padding: 10px 12px;
+  }
+}

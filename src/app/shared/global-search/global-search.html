@@ -1,0 +1,138 @@
+<div class="global-search">
+
+  <form class="search-form" (ngSubmit)="onSearch()">
+    <input
+      type="search"
+      name="search"
+      class="search-input"
+      placeholder="Search schools, classes, categories, products..."
+      aria-label="Global search"
+      autocomplete="off"
+      [(ngModel)]="searchText"
+      (ngModelChange)="onSearchChange($event)"
+      (keydown.escape)="closeSuggestions()"
+    />
+
+    <button
+      type="submit"
+      class="search-btn"
+      [disabled]="!searchText.trim()"
+    >
+      Search
+    </button>
+  </form>
+
+  @if (showSuggestions()) {
+    <div class="search-dropdown">
+
+      @if (isLoading()) {
+        <p class="search-message">Searching...</p>
+      }
+
+      @else if (errorMessage()) {
+        <p class="search-message error-message">
+          {{ errorMessage() }}
+        </p>
+      }
+
+      @else if (searchResults(); as results) {
+
+        <!-- Schools -->
+        @if (results.schools.length > 0) {
+          <div class="search-section">
+            <h4>Schools</h4>
+
+            @for (school of results.schools.slice(0, 3); track school.id) {
+              <div
+                class="search-item"
+                (click)="openSchool(school)"
+              >
+                <span>{{ school.name }}</span>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Classes -->
+        @if (results.classes.length > 0) {
+          <div class="search-section">
+            <h4>Classes</h4>
+
+            @for (schoolClass of results.classes.slice(0, 3); track schoolClass.id) {
+              <div
+                class="search-item"
+                (click)="openClass(schoolClass)"
+              >
+                <span>{{ schoolClass.name }}</span>
+                <small>{{ schoolClass.schoolName }}</small>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Categories -->
+        @if (results.categories.length > 0) {
+          <div class="search-section">
+            <h4>Categories</h4>
+
+            @for (category of results.categories.slice(0, 3); track $index) {
+              <div
+                class="search-item"
+                (click)="openCategory(category)"
+              >
+                <span>{{ category.name }}</span>
+                <small>
+                  {{ category.schoolName }}
+                  @if (category.className) {
+                    — {{ category.className }}
+                  }
+                </small>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Products -->
+        @if (results.products.length > 0) {
+          <div class="search-section">
+            <h4>Products</h4>
+
+            @for (product of results.products.slice(0, 3); track product.id) {
+              <div
+                class="search-item"
+                (click)="openProduct(product)"
+              >
+                <span>{{ product.name }}</span>
+                <small>
+                  {{ product.schoolName }}
+                  @if (product.className) {
+                    — {{ product.className }}
+                  }
+                </small>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- No results -->
+        @if (
+          results.schools.length === 0 &&
+          results.classes.length === 0 &&
+          results.categories.length === 0 &&
+          results.products.length === 0
+        ) {
+          <p class="search-message">No results found.</p>
+        } @else {
+          <button
+            type="button"
+            class="view-all-btn"
+            (click)="onSearch()"
+          >
+            View all results
+          </button>
+        }
+      }
+    </div>
+  }
+
+</div>

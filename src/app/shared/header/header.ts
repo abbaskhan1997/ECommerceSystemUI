@@ -3,10 +3,11 @@ import { RouterLink } from '@angular/router';
 import { PopupService } from '../../services/popup-service';
 import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart-service';
+import { GlobalSearch } from '../global-search/global-search';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink],
+  imports: [RouterLink, GlobalSearch],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
